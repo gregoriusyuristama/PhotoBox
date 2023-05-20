@@ -26,6 +26,7 @@ class LocationDataManager : NSObject, ObservableObject, CLLocationManagerDelegat
         case .authorizedWhenInUse:  // Location services are available.
             // Insert code here of what should happen when Location services are authorized
             authorizationStatus = .authorizedWhenInUse
+            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
             locationManager.requestLocation()
             break
             

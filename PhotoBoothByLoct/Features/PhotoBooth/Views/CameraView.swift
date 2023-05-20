@@ -1,69 +1,90 @@
-//
-//  CameraView.swift
-//  PhotoBoothByLoct
-//
-//  Created by Gregorius Yuristama Nugraha on 5/19/23.
-//
+/*
+ See the License.txt file for this sample’s licensing information.
+ */
 
 import SwiftUI
 
 struct CameraView: View {
-    @StateObject private var model = CameraViewModel()
+    @StateObject private var model = DataModel()
+    
+    private static let barHeightFactor = 0.15
+    
     
     var body: some View {
+        
         ZStack {
-            Rectangle()
-                .fill(.black)
-                .frame(width: .infinity, height: .infinity)
-                .ignoresSafeArea()
             VStack{
-                FrameView(image: model.frame)
-                    .frame(width: 333, height: 510)
+                ViewfinderView(image:  $model.viewfinderImage )
+                //                    .overlay(alignment: .top) {
+                //                        Color.black
+                //                            .opacity(0.75)
+                //                            .frame(height: geometry.size.height * Self.barHeightFactor)
+                //                    }
+                //                    .overlay(alignment: .bottom) {
+                //                        buttonsView()
+                //                            .frame(height: geometry.size.height * Self.barHeightFactor)
+                //                            .background(.black.opacity(0.75))
+                //                    }
+                //                    .overlay(alignment: .center)  {
+                //                        Color.clear
+                //                            .frame(height: geometry.size.height * (1 - (Self.barHeightFactor * 2)))
+                //                            .accessibilityElement()
+                //                            .accessibilityLabel("View Finder")
+                //                            .accessibilityAddTraits([.isImage])
+                //                    }
+                    .background(.black)
+                    .frame(width: 333, height: 480)
                     .mask{
                         Rectangle()
                             .frame(width: 333, height: 480)
                             .cornerRadius(30)
                     }
-//                    .padding(.bottom, 24)
-//                    .padding(.top, 14)
+                
                 ScrollView(.horizontal, showsIndicators: false){
                     HStack{
-                        FrameView(image: model.frame)
+                        ViewfinderView(image:  $model.viewfinderImage )
                             .frame(width: 71, height: 76)
                             .mask{
                                 Rectangle()
                                     .frame(width: 71, height: 76)
                                     .cornerRadius(10)
                             }
-                        FrameView(image: model.frame)
+                        ViewfinderView(image:  $model.viewfinderImage )
                             .frame(width: 71, height: 76)
                             .mask{
                                 Rectangle()
                                     .frame(width: 71, height: 76)
                                     .cornerRadius(10)
                             }
-                        FrameView(image: model.frame)
+                        ViewfinderView(image:  $model.viewfinderImage )
                             .frame(width: 71, height: 76)
                             .mask{
                                 Rectangle()
                                     .frame(width: 71, height: 76)
                                     .cornerRadius(10)
                             }
-                        FrameView(image: model.frame)
+                        ViewfinderView(image:  $model.viewfinderImage )
                             .frame(width: 71, height: 76)
                             .mask{
                                 Rectangle()
                                     .frame(width: 71, height: 76)
                                     .cornerRadius(10)
                             }
-                        FrameView(image: model.frame)
+                        ViewfinderView(image:  $model.viewfinderImage )
                             .frame(width: 71, height: 76)
                             .mask{
                                 Rectangle()
                                     .frame(width: 71, height: 76)
                                     .cornerRadius(10)
                             }
-                        FrameView(image: model.frame)
+                        ViewfinderView(image:  $model.viewfinderImage )
+                            .frame(width: 71, height: 76)
+                            .mask{
+                                Rectangle()
+                                    .frame(width: 71, height: 76)
+                                    .cornerRadius(10)
+                            }
+                        ViewfinderView(image:  $model.viewfinderImage )
                             .frame(width: 71, height: 76)
                             .mask{
                                 Rectangle()
@@ -73,8 +94,16 @@ struct CameraView: View {
                     }
                 }
                 HStack{
-                    Image("sampleImage")
-                        .resizable()
+                    NavigationLink {
+                        PhotoCollectionView(photoCollection: model.photoCollection)
+                            .onAppear {
+                                model.camera.isPreviewPaused = true
+                            }
+                            .onDisappear {
+                                model.camera.isPreviewPaused = false
+                            }
+                    } label: {
+                        ThumbnailView(image: model.thumbnailImage)
                         .frame(width: 61, height: 61)
                         .mask{
                             Rectangle()
@@ -82,6 +111,17 @@ struct CameraView: View {
                                 .cornerRadius(10)
                         }
                         .padding(.leading, 46)
+                    }
+                    
+//                    Image("sampleImage")
+//                        .resizable()
+//                        .frame(width: 61, height: 61)
+//                        .mask{
+//                            Rectangle()
+//                                .frame(width: 61, height: 61)
+//                                .cornerRadius(10)
+//                        }
+//                        .padding(.leading, 46)
                     Spacer()
                     Button{
                         
@@ -98,25 +138,84 @@ struct CameraView: View {
                             }
                     }
                     Spacer()
-                    Text("\(Image(systemName: "arrow.triangle.2.circlepath.camera"))")
-                        .font(.system(size: 34))
-                        .padding(.trailing, 46)
-                        .foregroundColor(.white)
+                    Button{
+                        model.camera.switchCaptureDevice()
+                    }label: {
+                        Text("\(Image(systemName: "arrow.triangle.2.circlepath.camera"))")
+                            .font(.system(size: 34))
+                            .padding(.trailing, 46)
+                            .foregroundColor(.white)
+                    }
+
                 }
-                .padding(.bottom)
                 
             }
             
+        }
+        .task {
+            await model.camera.start()
+            await model.loadPhotos()
+            await model.loadThumbnail()
+        }
+        .navigationTitle("Photo Booth")
+        .navigationBarTitleDisplayMode(.inline)
+        //            .navigationBarHidden(true)
+        .ignoresSafeArea()
+        .statusBar(hidden: true)
+    }
+    
+    private func buttonsView() -> some View {
+        HStack(spacing: 60) {
             
-            ErrorView(error: model.error)
+            Spacer()
+            
+            NavigationLink {
+                PhotoCollectionView(photoCollection: model.photoCollection)
+                    .onAppear {
+                        model.camera.isPreviewPaused = true
+                    }
+                    .onDisappear {
+                        model.camera.isPreviewPaused = false
+                    }
+            } label: {
+                Label {
+                    Text("Gallery")
+                } icon: {
+                    ThumbnailView(image: model.thumbnailImage)
+                }
+            }
+            
+            Button {
+                model.camera.takePhoto()
+            } label: {
+                Label {
+                    Text("Take Photo")
+                } icon: {
+                    ZStack {
+                        Circle()
+                            .strokeBorder(.white, lineWidth: 3)
+                            .frame(width: 62, height: 62)
+                        Circle()
+                            .fill(.white)
+                            .frame(width: 50, height: 50)
+                    }
+                }
+            }
+            
+            Button {
+                model.camera.switchCaptureDevice()
+            } label: {
+                Label("Switch Camera", systemImage: "arrow.triangle.2.circlepath")
+                    .font(.system(size: 36, weight: .bold))
+                    .foregroundColor(.white)
+            }
+            
+            Spacer()
             
         }
+        .buttonStyle(.plain)
+        .labelStyle(.iconOnly)
+        .padding()
     }
+    
 }
-
-struct CameraView_Previews: PreviewProvider {
-    static var previews: some View {
-        CameraView()
-    }
-}
-
