@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct PhotoBoothByLoctApp: App {
+    @StateObject private var albumDataController = AlbumDataController()
+    
     var body: some Scene {
         WindowGroup {
             HomepageView()
+                .environment(\.managedObjectContext, albumDataController.container.viewContext)
+//            ContentView()
         }
     }
 }

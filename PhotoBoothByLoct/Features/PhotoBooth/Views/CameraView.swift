@@ -40,59 +40,59 @@ struct CameraView: View {
                             .cornerRadius(30)
                     }
                 
-                ScrollView(.horizontal, showsIndicators: false){
-                    HStack{
-                        ViewfinderView(image:  $model.viewfinderImage )
-                            .frame(width: 71, height: 76)
-                            .mask{
-                                Rectangle()
-                                    .frame(width: 71, height: 76)
-                                    .cornerRadius(10)
-                            }
-                        ViewfinderView(image:  $model.viewfinderImage )
-                            .frame(width: 71, height: 76)
-                            .mask{
-                                Rectangle()
-                                    .frame(width: 71, height: 76)
-                                    .cornerRadius(10)
-                            }
-                        ViewfinderView(image:  $model.viewfinderImage )
-                            .frame(width: 71, height: 76)
-                            .mask{
-                                Rectangle()
-                                    .frame(width: 71, height: 76)
-                                    .cornerRadius(10)
-                            }
-                        ViewfinderView(image:  $model.viewfinderImage )
-                            .frame(width: 71, height: 76)
-                            .mask{
-                                Rectangle()
-                                    .frame(width: 71, height: 76)
-                                    .cornerRadius(10)
-                            }
-                        ViewfinderView(image:  $model.viewfinderImage )
-                            .frame(width: 71, height: 76)
-                            .mask{
-                                Rectangle()
-                                    .frame(width: 71, height: 76)
-                                    .cornerRadius(10)
-                            }
-                        ViewfinderView(image:  $model.viewfinderImage )
-                            .frame(width: 71, height: 76)
-                            .mask{
-                                Rectangle()
-                                    .frame(width: 71, height: 76)
-                                    .cornerRadius(10)
-                            }
-                        ViewfinderView(image:  $model.viewfinderImage )
-                            .frame(width: 71, height: 76)
-                            .mask{
-                                Rectangle()
-                                    .frame(width: 71, height: 76)
-                                    .cornerRadius(10)
-                            }
-                    }
-                }
+//                ScrollView(.horizontal, showsIndicators: false){
+//                    HStack{
+//                        ViewfinderView(image:  $model.viewfinderImage )
+//                            .frame(width: 71, height: 76)
+//                            .mask{
+//                                Rectangle()
+//                                    .frame(width: 71, height: 76)
+//                                    .cornerRadius(10)
+//                            }
+//                        ViewfinderView(image:  $model.viewfinderImage )
+//                            .frame(width: 71, height: 76)
+//                            .mask{
+//                                Rectangle()
+//                                    .frame(width: 71, height: 76)
+//                                    .cornerRadius(10)
+//                            }
+//                        ViewfinderView(image:  $model.viewfinderImage )
+//                            .frame(width: 71, height: 76)
+//                            .mask{
+//                                Rectangle()
+//                                    .frame(width: 71, height: 76)
+//                                    .cornerRadius(10)
+//                            }
+//                        ViewfinderView(image:  $model.viewfinderImage )
+//                            .frame(width: 71, height: 76)
+//                            .mask{
+//                                Rectangle()
+//                                    .frame(width: 71, height: 76)
+//                                    .cornerRadius(10)
+//                            }
+//                        ViewfinderView(image:  $model.viewfinderImage )
+//                            .frame(width: 71, height: 76)
+//                            .mask{
+//                                Rectangle()
+//                                    .frame(width: 71, height: 76)
+//                                    .cornerRadius(10)
+//                            }
+//                        ViewfinderView(image:  $model.viewfinderImage )
+//                            .frame(width: 71, height: 76)
+//                            .mask{
+//                                Rectangle()
+//                                    .frame(width: 71, height: 76)
+//                                    .cornerRadius(10)
+//                            }
+//                        ViewfinderView(image:  $model.viewfinderImage )
+//                            .frame(width: 71, height: 76)
+//                            .mask{
+//                                Rectangle()
+//                                    .frame(width: 71, height: 76)
+//                                    .cornerRadius(10)
+//                            }
+//                    }
+//                }
                 HStack{
                     NavigationLink {
                         PhotoCollectionView(photoCollection: model.photoCollection)

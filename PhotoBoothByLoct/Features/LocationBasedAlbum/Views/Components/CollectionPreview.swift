@@ -9,9 +9,10 @@ import SwiftUI
 
 struct CollectionPreview: View {
     var previewImage: String?
+    var name: String
     var body: some View {
         VStack(alignment: .leading){
-            Image(previewImage ?? "sampleImage")
+            Image(previewImage ?? "noPhotos")
                 .resizable()
                 .frame(width: 168, height: 168)
                 .mask{
@@ -19,8 +20,8 @@ struct CollectionPreview: View {
                         .cornerRadius(10)
                         .frame(width: 168, height: 168)
                 }
-            Text("@ADA")
-            Text("2.100")
+            Text("@\(name)")
+            Text("0")
                 .foregroundColor(.gray)
         }
 
@@ -29,6 +30,6 @@ struct CollectionPreview: View {
 
 struct CollectionPreview_Previews: PreviewProvider {
     static var previews: some View {
-        CollectionPreview()
+        CollectionPreview(name: "ADA")
     }
 }

@@ -51,7 +51,7 @@ struct MKMapViewRepresentable: UIViewRepresentable {
         var control: MKMapViewRepresentable
         
         //        let locationManager = CLLocationManager()
-        @State var locationDataManager = LocationDataManager()
+        @ObservedObject var locationDataManager = LocationDataManager()
         
         init(_ control: MKMapViewRepresentable) {
             self.control = control

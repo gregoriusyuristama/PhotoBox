@@ -22,6 +22,10 @@
 		B63BB50B2A180C1E000AF241 /* PhotoItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63BB50A2A180C1E000AF241 /* PhotoItemView.swift */; };
 		B63BB5102A181389000AF241 /* MapViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63BB50F2A181389000AF241 /* MapViewContainer.swift */; };
 		B63BB5122A1813B3000AF241 /* MapViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63BB5112A1813B3000AF241 /* MapViewRepresentable.swift */; };
+		B63BB5152A1A1866000AF241 /* AlbumModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B63BB5132A1A1865000AF241 /* AlbumModel.xcdatamodeld */; };
+		B63BB5172A1A1A17000AF241 /* AlbumDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63BB5162A1A1A17000AF241 /* AlbumDataController.swift */; };
+		B63BB5192A1A1BCB000AF241 /* AddAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63BB5182A1A1BCB000AF241 /* AddAlbumView.swift */; };
+		B63BB51D2A1A6973000AF241 /* RegionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63BB51C2A1A6973000AF241 /* RegionModel.swift */; };
 		B654D9042A14D89900F633CE /* PhotoBoothByLoctApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B654D9032A14D89900F633CE /* PhotoBoothByLoctApp.swift */; };
 		B654D9062A14D89900F633CE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B654D9052A14D89900F633CE /* ContentView.swift */; };
 		B654D9082A14D89A00F633CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B654D9072A14D89A00F633CE /* Assets.xcassets */; };
@@ -63,6 +67,10 @@
 		B63BB50A2A180C1E000AF241 /* PhotoItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoItemView.swift; sourceTree = "<group>"; };
 		B63BB50F2A181389000AF241 /* MapViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewContainer.swift; sourceTree = "<group>"; };
 		B63BB5112A1813B3000AF241 /* MapViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewRepresentable.swift; sourceTree = "<group>"; };
+		B63BB5142A1A1866000AF241 /* AlbumModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AlbumModel.xcdatamodel; sourceTree = "<group>"; };
+		B63BB5162A1A1A17000AF241 /* AlbumDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumDataController.swift; sourceTree = "<group>"; };
+		B63BB5182A1A1BCB000AF241 /* AddAlbumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAlbumView.swift; sourceTree = "<group>"; };
+		B63BB51C2A1A6973000AF241 /* RegionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionModel.swift; sourceTree = "<group>"; };
 		B654D9002A14D89900F633CE /* PhotoBoothByLoct.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoBoothByLoct.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B654D9032A14D89900F633CE /* PhotoBoothByLoctApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoBoothByLoctApp.swift; sourceTree = "<group>"; };
 		B654D9052A14D89900F633CE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -250,6 +258,8 @@
 			children = (
 				B6AA4A772A14E3DD00CF58FA /* LocationModel.swift */,
 				B6AA4A792A14E47500CF58FA /* LocationModelRepository.swift */,
+				B63BB5132A1A1865000AF241 /* AlbumModel.xcdatamodeld */,
+				B63BB51C2A1A6973000AF241 /* RegionModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -258,6 +268,7 @@
 			isa = PBXGroup;
 			children = (
 				B6AA4A7C2A14E4F300CF58FA /* LocationViewModel.swift */,
+				B63BB5162A1A1A17000AF241 /* AlbumDataController.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -292,6 +303,7 @@
 				B6AA4A822A16859400CF58FA /* HomepageView.swift */,
 				B6AA4A862A168EE800CF58FA /* CollectionView.swift */,
 				B6B80AFD2A17302A00E8C94A /* AlbumView.swift */,
+				B63BB5182A1A1BCB000AF241 /* AddAlbumView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -434,6 +446,7 @@
 				B63BB4FF2A180B7D000AF241 /* PhotoLibrary.swift in Sources */,
 				B6B80AFC2A17267E00E8C94A /* CollectionPreview.swift in Sources */,
 				B6B80B012A174D6700E8C94A /* CameraManager.swift in Sources */,
+				B63BB51D2A1A6973000AF241 /* RegionModel.swift in Sources */,
 				B6B80B0B2A174DD700E8C94A /* CameraViewOld.swift in Sources */,
 				B6AA4A872A168EE800CF58FA /* CollectionView.swift in Sources */,
 				B6B80AFE2A17302A00E8C94A /* AlbumView.swift in Sources */,
@@ -443,7 +456,10 @@
 				B6AA4A7D2A14E4F300CF58FA /* LocationViewModel.swift in Sources */,
 				B6B80B072A174DA900E8C94A /* CGImageExtension.swift in Sources */,
 				B63BB4FB2A180B58000AF241 /* PhotoAssetCollection.swift in Sources */,
+				B63BB5152A1A1866000AF241 /* AlbumModel.xcdatamodeld in Sources */,
+				B63BB5172A1A1A17000AF241 /* AlbumDataController.swift in Sources */,
 				B6AA4A852A1689AB00CF58FA /* EmptyCollectionView.swift in Sources */,
+				B63BB5192A1A1BCB000AF241 /* AddAlbumView.swift in Sources */,
 				B6AA4A832A16859400CF58FA /* HomepageView.swift in Sources */,
 				B6AA4A7A2A14E47500CF58FA /* LocationModelRepository.swift in Sources */,
 				B6B80B092A174DCB00E8C94A /* FrameView.swift in Sources */,
@@ -593,7 +609,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoBoothByLoct/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_CFBundleDisplayName = PhotoBox;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "App need to use camera to capture photo";
 				INFOPLIST_KEY_NSLocationUsageDescription = "request access location";
@@ -602,8 +618,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -611,9 +627,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = gregoriusyuristama.PhotoBoothByLoct;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -629,7 +648,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoBoothByLoct/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_CFBundleDisplayName = PhotoBox;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "App need to use camera to capture photo";
 				INFOPLIST_KEY_NSLocationUsageDescription = "request access location";
@@ -638,8 +657,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -647,9 +666,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = gregoriusyuristama.PhotoBoothByLoct;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -675,6 +697,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		B63BB5132A1A1865000AF241 /* AlbumModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				B63BB5142A1A1866000AF241 /* AlbumModel.xcdatamodel */,
+			);
+			currentVersion = B63BB5142A1A1866000AF241 /* AlbumModel.xcdatamodel */;
+			path = AlbumModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = B654D8F82A14D89900F633CE /* Project object */;
 }

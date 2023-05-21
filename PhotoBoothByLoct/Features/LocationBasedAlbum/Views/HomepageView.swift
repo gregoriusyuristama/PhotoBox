@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct HomepageView: View {
+
+    
     var body: some View {
         @State var selection = Tab.collection
         TabView{

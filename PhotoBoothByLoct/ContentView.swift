@@ -17,15 +17,15 @@ struct ContentView: View {
     
     var body: some View {
         
-        var region: Binding<MKCoordinateRegion>? {
-            guard let location = locationDataManager.locationManager.location else {
-                return MKCoordinateRegion.goldenGateRegion().getBinding()
-            }
-            
-            let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 500, longitudinalMeters: 500)
-            
-            return region.getBinding()
-        }
+//        var region: Binding<MKCoordinateRegion>? {
+//            guard let location = locationDataManager.locationManager.location else {
+//                return MKCoordinateRegion.goldenGateRegion().getBinding()
+//            }
+//
+//            let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 500, longitudinalMeters: 500)
+//
+//            return region.getBinding()
+//        }
         VStack {
             Map(coordinateRegion: $mapRegion, interactionModes: .all, showsUserLocation: true, userTrackingMode: .constant(.follow))
 
@@ -70,16 +70,16 @@ struct ContentView: View {
         }
     }
 }
-extension MKCoordinateRegion {
-    
-    static func goldenGateRegion() -> MKCoordinateRegion {
-        MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 37.819527098978355, longitude:  -122.47854602016669), latitudinalMeters: 5000, longitudinalMeters: 5000)
-    }
-    
-    func getBinding() -> Binding<MKCoordinateRegion>? {
-        return Binding<MKCoordinateRegion>(.constant(self))
-    }
-}
+//extension MKCoordinateRegion {
+//
+//    static func goldenGateRegion() -> MKCoordinateRegion {
+//        MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 37.819527098978355, longitude:  -122.47854602016669), latitudinalMeters: 5000, longitudinalMeters: 5000)
+//    }
+//
+//    func getBinding() -> Binding<MKCoordinateRegion>? {
+//        return Binding<MKCoordinateRegion>(.constant(self))
+//    }
+//}
 
 
 struct ContentView_Previews: PreviewProvider {
