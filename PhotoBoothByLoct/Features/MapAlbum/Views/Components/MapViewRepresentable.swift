@@ -13,11 +13,12 @@ import MapKit
 // MARK: - MKMapViewRepresentable
 
 struct MKMapViewRepresentable: UIViewRepresentable {
+    @FetchRequest(sortDescriptors: [SortDescriptor(\.albumName)]) var albums: FetchedResults<Album>
     
     var userTrackingMode: Binding<MKUserTrackingMode>
     
     @EnvironmentObject private var mapViewContainer: MapViewContainer
-    @State private var annotations: [AnnotationItem] = [AnnotationItem()]
+//    @State private var annotations: [AnnotationItem] = []
     //    @StateObject private var authStatus = locationdata
     
     func makeUIView(context: UIViewRepresentableContext<MKMapViewRepresentable>) -> MKMapView {
@@ -32,11 +33,19 @@ struct MKMapViewRepresentable: UIViewRepresentable {
         if mapView.userTrackingMode != userTrackingMode.wrappedValue {
             mapView.setUserTrackingMode(userTrackingMode.wrappedValue, animated: true)
         }
-        mapView.addAnnotations(annotations.map { annotationItem in
+        
+        albums.forEach{ album in
             let annotation = MKPointAnnotation()
-            annotation.coordinate = annotationItem.coordinate
-            return annotation
-        })
+            annotation.coordinate = CLLocationCoordinate2D(latitude: album.latitude, longitude: album.longitude)
+            
+            mapView.addAnnotation(annotation)
+            
+        }
+//        mapView.addAnnotations(annotations.map { annotationItem in
+//            let annotation = MKPointAnnotation()
+//            annotation.coordinate = annotationItem.coordinate
+//            return annotation
+//        })
     }
     
     func makeCoordinator() -> MapViewCoordinator {
@@ -191,7 +200,11 @@ struct MKMapViewRepresentable: UIViewRepresentable {
     
 }
 
-struct AnnotationItem: Identifiable {
-    let id = UUID()
-    let coordinate = CLLocationCoordinate2D(latitude: -6.3058101, longitude: 106.6526647)
-}
+//class AnnotationItem: Identifiable {
+//    let id = UUID()
+//    let coordinate: CLLocationCoordinate2D
+//
+//    init(coordinate: CLLocationCoordinate2D) {
+//        self.coordinate = coordinate
+//    }
+//}

@@ -47,12 +47,13 @@ class AlbumDataController: ObservableObject {
     }
     func deleteAlbum(album: Album, context: NSManagedObjectContext){
         context.delete(album)
-        do{
-            try context.save()
-//            dismiss()
-        }catch{
-            print(error)
-        }
+        save(context: context)
+//        do{
+//            try context.save()
+////            dismiss()
+//        }catch{
+//            print(error)
+//        }
     }
 }
 

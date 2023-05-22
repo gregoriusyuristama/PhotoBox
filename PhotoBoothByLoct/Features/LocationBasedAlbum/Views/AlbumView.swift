@@ -13,38 +13,49 @@ struct AlbumView: View {
     @Environment (\.managedObjectContext) var managedObjContext
     @Environment(\.dismiss) var dismiss
     
-    @StateObject var locationDataManager = LocationDataManager()
+    @ObservedObject var locationDataManager = LocationDataManager()
     @StateObject var locationViewModel = LocationViewModel()
     //    @State var testLocVM = TestLocViewModel()
     
     @State private var isPresentingConfirm: Bool = false
     @State private var isPresentingRename: Bool = false
     @State private var isPresentingLockedRegion: Bool = false
+    @State private var isShowingAddSheet: Bool = false
     @State private var textFieldText = ""
-    @State public var isInsideRegion = false
-    @State private var enteredRegion: String = ""
+    @State private var selectedImage = UIImage()
+//    @State public var isInsideRegion = false
+//    @State private var enteredRegion: String = ""
     //    private var cancellables = Set<AnyCancellable>()
+    
+    
     
     var name: String
     //    var deleteAlbum: (Album) -> ()
     var album: Album!
+    
+    @State private var region: CLCircularRegion?
     var body: some View {
         ScrollView{
             VStack{
                 HStack(spacing: 1){
-                    Image("sampleImage")
-                        .resizable()
-                        .frame(width: 130, height: 130)
-                    Image("sampleImage")
-                        .resizable()
-                        .frame(width: 130, height: 130)
-                    Image("sampleImage")
-                        .resizable()
-                        .frame(width: 130, height: 130)
+                    ForEach(album.photos){ photo in
+                        Image(uiImage: UIImage(data: photo.photo!)!)
+                            .resizable()
+                            .frame(width: 130, height: 130)
+                    }
+//                    Image("sampleImage")
+//                        .resizable()
+//                        .frame(width: 130, height: 130)
+//                    Image("sampleImage")
+//                        .resizable()
+//                        .frame(width: 130, height: 130)
+//                    Image("sampleImage")
+//                        .resizable()
+//                        .frame(width: 130, height: 130)
                 }
                 Text("latitude: \(album.latitude)")
                 Text("latitude: \(album.longitude)")
-                Text(isInsideRegion ? "Inside Region" : "Outside Region")
+                Text(locationDataManager.isInRegion ? "Inside Region" : "Outside Region")
                 switch locationDataManager.locationManager.authorizationStatus {
                 case .authorizedWhenInUse:  // Location services are available.
                     // Insert code here of what should happen when Location services are authorized
@@ -52,7 +63,7 @@ struct AlbumView: View {
                     Text("Latitude: \(locationDataManager.locationManager.location?.coordinate.latitude.description ?? "Error loading")")
                     Text("Longitude: \(locationDataManager.locationManager.location?.coordinate.longitude.description ?? "Error loading")")
                     Button{
-                        locationDataManager.locationManager.requestLocation()
+                        locationDataManager.locationManager.startUpdatingLocation()
                         locationViewModel.latitude = (locationDataManager.locationManager.location?.coordinate.latitude.description)!
                         locationViewModel.longitude = (locationDataManager.locationManager.location?.coordinate.longitude.description)!
                         //                    locationViewModel.saveResult()
@@ -70,7 +81,7 @@ struct AlbumView: View {
                     ProgressView()
                 }
                 
-                Text("Region: \(enteredRegion)")
+                Text("Region: \(locationDataManager.isInRegion ? locationDataManager.regionIdentifierToCheck! : String("Test"))")
                 
                 
             }
@@ -80,10 +91,12 @@ struct AlbumView: View {
         .navigationTitle("@\(name)")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                if isInsideRegion {
-                    NavigationLink{
-                        CameraView()
-                            .toolbar(.hidden, for: .tabBar)
+                if locationDataManager.isInRegion {
+                    Button{
+//                        CameraView()
+//                            .toolbar(.hidden, for: .tabBar)
+                        isShowingAddSheet = true
+//                        ImagePickerView(selectedImage: $selectedImage)
                     }label: {
                         Image(systemName: "camera")
                     }
@@ -145,26 +158,57 @@ struct AlbumView: View {
                 } message: {
                     Text("You are outside photo box location, camera locked")
                 }
+                .sheet(isPresented: $isShowingAddSheet){
+                    ImagePickerView(selectedImage: $selectedImage)
+                        .onDisappear{
+                            
+                            addPhoto()
+                        }
+                }
                 
             }
         }
         .onAppear{
-//                        let region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: album.latitude, longitude: album.longitude), radius: 1000, identifier: album.idAlbum!.uuidString)
+            locationDataManager.shouldStartMonitoring = true
+            region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: album.latitude, longitude: album.longitude), radius: 1000, identifier: album.idAlbum!.uuidString)
+            locationDataManager.startMonitoring(region: region!, identifier: album.idAlbum!.uuidString)
+            
+//            locationDataManager.regionEnteredHandler = { region in
+//                enteredRegion = region
+//                print(region)
+//                if enteredRegion == album.idAlbum!.uuidString{
+//                    isInsideRegion = true
+//                } else {
+//                    isInsideRegion = false
+//                }
+//            }
+//                print(locationDataManager.locationManager.monitoredRegions)
+            
+            
+            
+            //            locationDataManager.locationManager.startUpdatingHeading()
+            
+        }
+        .onDisappear{
+//            locationDataManager.shouldStartMonitoring = false
+            //            let region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: album.latitude, longitude: album.longitude), radius: 1000, identifier: album.idAlbum!.uuidString)
+//            locationDataManager.locationManager.stopMonitoring(for: self.region!)
             //            locationDataManager.locationManager.startMonitoring(for: region)
-//            locationDataManager.locationManager.startUpdatingHeading()
-            locationDataManager.regionEnteredHandler = { region in
-                enteredRegion = region
-                if enteredRegion == album.idAlbum!.uuidString{
-                    isInsideRegion = true
-                } else {
-                    isInsideRegion = false
-                }
-            }
         }
         
         
     }
-    
+    private func addPhoto(){
+        let newPhoto = Photos(context: managedObjContext)
+        newPhoto.photosToAlbum = album
+        newPhoto.id = UUID()
+        newPhoto.photo = selectedImage.pngData()
+        do {
+            try managedObjContext.save()
+        } catch{
+            print("Error While saving photos")
+        }
+    }
 }
 
 

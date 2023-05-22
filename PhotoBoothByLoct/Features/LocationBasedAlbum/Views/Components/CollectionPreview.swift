@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct CollectionPreview: View {
-    var previewImage: String?
+    var previewImage: Data?
     var name: String
+    var count: Int
     var body: some View {
         VStack(alignment: .leading){
-            Image(previewImage ?? "noPhotos")
+            Image(uiImage: ((previewImage != nil) ? UIImage(data: previewImage!) : UIImage(named: "noPhotos"))!)
                 .resizable()
                 .frame(width: 168, height: 168)
                 .mask{
@@ -21,7 +22,7 @@ struct CollectionPreview: View {
                         .frame(width: 168, height: 168)
                 }
             Text("@\(name)")
-            Text("0")
+            Text("\(count)")
                 .foregroundColor(.gray)
         }
 
@@ -30,6 +31,6 @@ struct CollectionPreview: View {
 
 struct CollectionPreview_Previews: PreviewProvider {
     static var previews: some View {
-        CollectionPreview(name: "ADA")
+        CollectionPreview(name: "ADA", count: 0)
     }
 }

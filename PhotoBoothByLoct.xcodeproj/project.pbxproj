@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B6128CD62A1B50D800581608 /* Album+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6128CD42A1B50D800581608 /* Album+CoreDataClass.swift */; };
+		B6128CD72A1B50D800581608 /* Album+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6128CD52A1B50D800581608 /* Album+CoreDataProperties.swift */; };
+		B6128CD92A1B5DF600581608 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6128CD82A1B5DF600581608 /* ImagePicker.swift */; };
 		B63BB4F32A180AE9000AF241 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63BB4F22A180AE9000AF241 /* Camera.swift */; };
 		B63BB4F52A180AFC000AF241 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63BB4F42A180AFC000AF241 /* DataModel.swift */; };
 		B63BB4F72A180B18000AF241 /* PhotoCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63BB4F62A180B18000AF241 /* PhotoCollection.swift */; };
@@ -52,6 +55,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B6128CD42A1B50D800581608 /* Album+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Album+CoreDataClass.swift"; path = "PhotoBoothByLoct/Features/LocationBasedAlbum/Model/Album+CoreDataClass.swift"; sourceTree = "<group>"; };
+		B6128CD52A1B50D800581608 /* Album+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Album+CoreDataProperties.swift"; path = "PhotoBoothByLoct/Features/LocationBasedAlbum/Model/Album+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		B6128CD82A1B5DF600581608 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		B63BB4F22A180AE9000AF241 /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		B63BB4F42A180AFC000AF241 /* DataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		B63BB4F62A180B18000AF241 /* PhotoCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCollection.swift; sourceTree = "<group>"; };
@@ -138,6 +144,8 @@
 		B654D8F72A14D89900F633CE = {
 			isa = PBXGroup;
 			children = (
+				B6128CD42A1B50D800581608 /* Album+CoreDataClass.swift */,
+				B6128CD52A1B50D800581608 /* Album+CoreDataProperties.swift */,
 				B654D9022A14D89900F633CE /* PhotoBoothByLoct */,
 				B654D9012A14D89900F633CE /* Products */,
 			);
@@ -303,6 +311,7 @@
 				B6AA4A822A16859400CF58FA /* HomepageView.swift */,
 				B6AA4A862A168EE800CF58FA /* CollectionView.swift */,
 				B6B80AFD2A17302A00E8C94A /* AlbumView.swift */,
+				B6128CD82A1B5DF600581608 /* ImagePicker.swift */,
 				B63BB5182A1A1BCB000AF241 /* AddAlbumView.swift */,
 			);
 			path = Views;
@@ -467,8 +476,11 @@
 				B6B80B0F2A174E0300E8C94A /* ErrorView.swift in Sources */,
 				B63BB4FD2A180B68000AF241 /* CachedImageManager.swift in Sources */,
 				B654D9062A14D89900F633CE /* ContentView.swift in Sources */,
+				B6128CD92A1B5DF600581608 /* ImagePicker.swift in Sources */,
 				B6B80B122A174E1E00E8C94A /* CameraViewModel.swift in Sources */,
 				B6AA4A892A168F1F00CF58FA /* MapView.swift in Sources */,
+				B6128CD62A1B50D800581608 /* Album+CoreDataClass.swift in Sources */,
+				B6128CD72A1B50D800581608 /* Album+CoreDataProperties.swift in Sources */,
 				B654D9042A14D89900F633CE /* PhotoBoothByLoctApp.swift in Sources */,
 				B63BB5092A180C18000AF241 /* PhotoView.swift in Sources */,
 				B63BB50B2A180C1E000AF241 /* PhotoItemView.swift in Sources */,
@@ -612,8 +624,10 @@
 				INFOPLIST_KEY_CFBundleDisplayName = PhotoBox;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "App need to use camera to capture photo";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "App need to use location";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "need to use location";
 				INFOPLIST_KEY_NSLocationUsageDescription = "request access location";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "App need to use location";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "need to use location";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "need to access photos";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -651,8 +665,10 @@
 				INFOPLIST_KEY_CFBundleDisplayName = PhotoBox;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "App need to use camera to capture photo";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "App need to use location";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "need to use location";
 				INFOPLIST_KEY_NSLocationUsageDescription = "request access location";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "App need to use location";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "need to use location";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "need to access photos";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

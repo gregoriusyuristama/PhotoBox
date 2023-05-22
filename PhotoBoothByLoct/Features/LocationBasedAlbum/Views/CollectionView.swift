@@ -34,11 +34,9 @@ struct CollectionView: View {
                         HStack{
                             ForEach(albums){ album in
                                 NavigationLink(destination: AlbumView( name: album.albumName!, album: album)){
-                                    CollectionPreview(name: album.albumName!)
+                                    CollectionPreview(previewImage: album.photos.last?.photo, name: album.albumName!, count: album.photos.count)
                                 }
-                                
                             }
-                            
                         }
                         .padding(.horizontal, 20)
                     }
@@ -57,17 +55,20 @@ struct CollectionView: View {
                     }
                 }
             }
+            
             .sheet(isPresented: $showingAddView){
                 AddAlbumView()
             }
         }
         .onAppear{
-            //MARK: BUG KETIKA BALIK LAGI KE HALAMAN INI APPEND KE REGION YANG DIMONITOR
+            
+            
 //            albums.forEach{ album in
 //                locationDataManager.locationManager.startMonitoring(for: CLCircularRegion(center: CLLocationCoordinate2D(latitude: album.latitude, longitude: album.longitude), radius: locationDataManager.locationManager.maximumRegionMonitoringDistance, identifier: album.idAlbum!.uuidString))
 //                print(album.albumName)
 //            }
         }
+
 
     }
 

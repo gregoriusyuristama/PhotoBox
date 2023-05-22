@@ -16,13 +16,18 @@ class LocationDataManager : NSObject, ObservableObject, CLLocationManagerDelegat
     
 //    @FetchRequest(sortDescriptors: [SortDescriptor(\.albumName)]) var albums: FetchedResults<Album>
     @Published var authorizationStatus: CLAuthorizationStatus?
+    @Published var shouldStartMonitoring = false
+    @Published var isInRegion = false
+    
+    var regionIdentifierToCheck: String?
     
     var regionList: [CLCircularRegion] = [CLCircularRegion]()
-    var regionEnteredHandler: ((String) -> Void)?
+//    var regionEnteredHandler: ((String) -> Void)?
     
     override init() {
         super.init()
         locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
 //        albums.forEach{ album in
 //            locationManager.startMonitoring(for: CLCircularRegion(center: CLLocationCoordinate2D(latitude: album.latitude, longitude: album.longitude), radius: locationManager.maximumRegionMonitoringDistance, identifier: album.idAlbum!.uuidString))
 //            print(album.albumName)
@@ -35,9 +40,13 @@ class LocationDataManager : NSObject, ObservableObject, CLLocationManagerDelegat
             // Insert code here of what should happen when Location services are authorized
             
             authorizationStatus = .authorizedWhenInUse
-//            locationManager.allowsBackgroundLocationUpdates = true
-            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-            locationManager.requestLocation()
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            if shouldStartMonitoring{
+                locationManager.startUpdatingLocation()
+            } else {
+                locationManager.stopUpdatingLocation()
+            }
+//            locationManager.startUpdatingLocation()
             
             
 //            let region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: -6.3058101, longitude: 106.6526647), radius: 100, identifier: "Ur ID")
@@ -45,6 +54,12 @@ class LocationDataManager : NSObject, ObservableObject, CLLocationManagerDelegat
 //            region.notifyOnEntry = true
 //            manager.startMonitoring(for: region)
             break
+            
+        case .authorizedAlways:
+            authorizationStatus = .authorizedAlways
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.allowsBackgroundLocationUpdates = true
+            locationManager.startUpdatingLocation()
             
         case .restricted:  // Location services currently unavailable.
             // Insert code here of what should happen when Location services are NOT authorized
@@ -66,10 +81,13 @@ class LocationDataManager : NSObject, ObservableObject, CLLocationManagerDelegat
         }
     }
     
-    func startMonitoring(regions: [CLRegion]) {
-        for region in regions {
-            locationManager.startMonitoring(for: region)
-        }
+    func startMonitoring(region: CLRegion, identifier: String) {
+        region.notifyOnExit = true
+        region.notifyOnEntry = true
+        locationManager.startMonitoring(for: region)
+        locationManager.requestState(for: region)
+        regionIdentifierToCheck = identifier
+//        print(locationManager.monitoredRegions)
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -84,14 +102,29 @@ class LocationDataManager : NSObject, ObservableObject, CLLocationManagerDelegat
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         // User has exited from ur regiom
         print("exited from region \(region.identifier)")
-        regionEnteredHandler?("")
+//        regionEnteredHandler?("")
+        if region.identifier == regionIdentifierToCheck {
+            isInRegion = false
+            // Perform specific action for this region identifier
+        }
     }
 
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         // User has exited from ur region
         print("entered to region \(region.identifier)")
-        regionEnteredHandler?(region.identifier)
+//        regionEnteredHandler?(region.identifier)
+        if region.identifier == regionIdentifierToCheck {
+            isInRegion = true
+            // Perform specific action for this region identifier
+        }
         
+    }
+    
+    
+    func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
+        if region.identifier == regionIdentifierToCheck {
+            isInRegion = state == .inside
+        }
     }
     
     
