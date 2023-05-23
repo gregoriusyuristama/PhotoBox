@@ -5,7 +5,11 @@
 import SwiftUI
 
 struct CameraView: View {
+    @Environment(\.managedObjectContext) var managedObjContext
+    
     @StateObject private var model = DataModel()
+    
+    var album: Album?
     
     private static let barHeightFactor = 0.15
     
@@ -124,7 +128,7 @@ struct CameraView: View {
 //                        .padding(.leading, 46)
                     Spacer()
                     Button{
-                        
+                        model.camera.takePhoto()
                     }label: {
                         Circle()
                             .fill(.white)
@@ -157,6 +161,9 @@ struct CameraView: View {
             await model.loadPhotos()
             await model.loadThumbnail()
         }
+        .onDisappear{
+            model.camera.stop()
+        }
         .navigationTitle("Photo Booth")
         .navigationBarTitleDisplayMode(.inline)
         //            .navigationBarHidden(true)
@@ -186,6 +193,7 @@ struct CameraView: View {
             }
             
             Button {
+//                model.camera.takePhoto()
                 model.camera.takePhoto()
             } label: {
                 Label {

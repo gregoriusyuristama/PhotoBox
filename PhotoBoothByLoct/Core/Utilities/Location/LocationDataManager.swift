@@ -46,20 +46,17 @@ class LocationDataManager : NSObject, ObservableObject, CLLocationManagerDelegat
             } else {
                 locationManager.stopUpdatingLocation()
             }
-//            locationManager.startUpdatingLocation()
-            
-            
-//            let region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: -6.3058101, longitude: 106.6526647), radius: 100, identifier: "Ur ID")
-//            region.notifyOnExit = true
-//            region.notifyOnEntry = true
-//            manager.startMonitoring(for: region)
             break
             
         case .authorizedAlways:
             authorizationStatus = .authorizedAlways
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             locationManager.allowsBackgroundLocationUpdates = true
-            locationManager.startUpdatingLocation()
+            if shouldStartMonitoring{
+                locationManager.startUpdatingLocation()
+            } else {
+                locationManager.stopUpdatingLocation()
+            }
             
         case .restricted:  // Location services currently unavailable.
             // Insert code here of what should happen when Location services are NOT authorized

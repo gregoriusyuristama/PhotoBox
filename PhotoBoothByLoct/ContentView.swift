@@ -11,7 +11,7 @@ import MapKit
 
 struct ContentView: View {
     @StateObject var locationDataManager = LocationDataManager()
-    @StateObject var locationViewModel = LocationViewModel()
+//    @StateObject var locationViewModel = LocationViewModel()
     @State private var mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.12), span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))
     
     
@@ -37,16 +37,16 @@ struct ContentView: View {
                 Text("Latitude: \(locationDataManager.locationManager.location?.coordinate.latitude.description ?? "Error loading")")
                 Text("Longitude: \(locationDataManager.locationManager.location?.coordinate.longitude.description ?? "Error loading")")
                 Button{
-                    locationViewModel.latitude = (locationDataManager.locationManager.location?.coordinate.latitude.description)!
-                    locationViewModel.longitude = (locationDataManager.locationManager.location?.coordinate.longitude.description)!
-                    locationViewModel.saveResult()
+//                    locationViewModel.latitude = (locationDataManager.locationManager.location?.coordinate.latitude.description)!
+//                    locationViewModel.longitude = (locationDataManager.locationManager.location?.coordinate.longitude.description)!
+//                    locationViewModel.saveResult()
                 }label: {
                     Text("Save Location")
                 }
                 Button{
                     locationDataManager.locationManager.requestLocation()
-                    locationViewModel.latitude = (locationDataManager.locationManager.location?.coordinate.latitude.description)!
-                    locationViewModel.longitude = (locationDataManager.locationManager.location?.coordinate.longitude.description)!
+//                    locationViewModel.latitude = (locationDataManager.locationManager.location?.coordinate.latitude.description)!
+//                    locationViewModel.longitude = (locationDataManager.locationManager.location?.coordinate.longitude.description)!
 //                    locationViewModel.saveResult()
                 }label: {       
                     Text("Refresh Location")
@@ -61,12 +61,12 @@ struct ContentView: View {
             default:
                 ProgressView()
             }
-            if !locationViewModel.isEmptyHistory(){
-                List(locationViewModel.savedLocationModelIndex) { loc in
-                    Text("\(loc.latitude), \(loc.longitude)")
-                }
-                
-            }
+//            if !locationViewModel.isEmptyHistory(){
+//                List(locationViewModel.savedLocationModelIndex) { loc in
+//                    Text("\(loc.latitude), \(loc.longitude)")
+//                }
+//
+//            }
         }
     }
 }

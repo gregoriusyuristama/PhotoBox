@@ -7,8 +7,11 @@ import SwiftUI
 import os.log
 
 final class DataModel: ObservableObject {
+    @Environment(\.managedObjectContext) var managedObjContext
     let camera = Camera()
     let photoCollection = PhotoCollection(smartAlbum: .smartAlbumUserLibrary)
+//    let album: Album?
+    
     
     @Published var viewfinderImage: Image?
     @Published var thumbnailImage: Image?

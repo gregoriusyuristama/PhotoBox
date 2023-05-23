@@ -21,7 +21,7 @@ class AlbumDataController: ObservableObject {
         }
     }
     
-    func save(context: NSManagedObjectContext){
+    private func save(context: NSManagedObjectContext){
         do {
             try context.save()
             print("Data Saved!! Woohoo")
@@ -54,6 +54,19 @@ class AlbumDataController: ObservableObject {
 //        }catch{
 //            print(error)
 //        }
+    }
+    
+    func addPhoto(album: Album, photo: Data, context: NSManagedObjectContext){
+        let newPhoto = Photos(context: context)
+        newPhoto.photosToAlbum = album
+        newPhoto.id = UUID()
+        newPhoto.photo = photo
+        save(context: context)
+    }
+    
+    func deletePhoto(photo: Photos, context: NSManagedObjectContext){
+        context.delete(photo)
+        save(context: context)
     }
 }
 

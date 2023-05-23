@@ -323,10 +323,24 @@ class Camera: NSObject {
             }
             
             photoOutput.capturePhoto(with: photoSettings, delegate: self)
+            
+//            return photoOutput
+//            print("Photo Output : \(photoOutput)")
         }
     }
 }
 
+//extension Camera: AVCapturePhotoCaptureDelegate {
+//    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+//        if let imageData = photo.fileDataRepresentation(), let capturedImage = UIImage(data: imageData) {
+//            // Do any necessary post-processing or modifications to the captured image here
+//            // Pass the captured image to the completion handler
+//            DispatchQueue.main.async {
+//                completion(capturedImage)
+//            }
+//        }
+//    }
+//}
 extension Camera: AVCapturePhotoCaptureDelegate {
     
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
@@ -335,6 +349,7 @@ extension Camera: AVCapturePhotoCaptureDelegate {
             logger.error("Error capturing photo: \(error.localizedDescription)")
             return
         }
+        
         
         addToPhotoStream?(photo)
     }

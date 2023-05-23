@@ -38,7 +38,7 @@ struct MapView: View {
                                         .foregroundColor(.blue)
                                 }
                             }
-                            .padding(.top, 13)
+                            .padding(.top, 60)
                             .padding(.trailing, 12)
 
                             Spacer()

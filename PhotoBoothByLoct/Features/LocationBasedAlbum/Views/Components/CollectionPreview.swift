@@ -13,8 +13,11 @@ struct CollectionPreview: View {
     var count: Int
     var body: some View {
         VStack(alignment: .leading){
+            
             Image(uiImage: ((previewImage != nil) ? UIImage(data: previewImage!) : UIImage(named: "noPhotos"))!)
                 .resizable()
+//                .scaledToFit()
+                .aspectRatio(contentMode: .fill)
                 .frame(width: 168, height: 168)
                 .mask{
                     Rectangle()

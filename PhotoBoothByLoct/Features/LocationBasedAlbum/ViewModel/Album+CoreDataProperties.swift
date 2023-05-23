@@ -24,9 +24,14 @@ extension Album {
     
     public var photos: [Photos]{
         let setOfPhotos = albumToPhotos
-        return setOfPhotos!.sorted{
-            $0.id > $1.id
+        if let setPhotos = setOfPhotos{
+            return setPhotos.sorted{
+                $0.id > $1.id
+            }
+        }else{
+            return []
         }
+
     }
 
 }

@@ -16,21 +16,19 @@ struct AddAlbumView: View {
     @State private var name = ""
     
     var body: some View {
-        VStack {
-            Form{
-                Section{
-                    TextField("Album Name", text: $name)
-                    MKMapViewRepresentable(userTrackingMode: .constant(.follow))
-                        .environmentObject(MapViewContainer())
-                        .frame(height: 300)
-                    HStack{
-                        Spacer()
-                        Button("Add New Album"){
-                            AlbumDataController().addAlbum(name: name, latitude: Double((locationDataManager.locationManager.location?.coordinate.latitude.description)!)!, longitude: Double((locationDataManager.locationManager.location?.coordinate.longitude.description)!)!, context: managedObjContext)
-                            dismiss()
-                        }
-                        Spacer()
+        Form{
+            Section{
+                TextField("Album Name", text: $name)
+                MKMapViewRepresentable(userTrackingMode: .constant(.follow))
+                    .environmentObject(MapViewContainer())
+                    .frame(height: 300)
+                HStack{
+                    Spacer()
+                    Button("Add New Album"){
+                        AlbumDataController().addAlbum(name: name, latitude: Double((locationDataManager.locationManager.location?.coordinate.latitude.description)!)!, longitude: Double((locationDataManager.locationManager.location?.coordinate.longitude.description)!)!, context: managedObjContext)
+                        dismiss()
                     }
+                    Spacer()
                 }
             }
         }
