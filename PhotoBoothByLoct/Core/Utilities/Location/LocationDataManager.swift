@@ -46,17 +46,20 @@ class LocationDataManager : NSObject, ObservableObject, CLLocationManagerDelegat
             } else {
                 locationManager.stopUpdatingLocation()
             }
+//            locationManager.startUpdatingLocation()
+            
+            
+//            let region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: -6.3058101, longitude: 106.6526647), radius: 100, identifier: "Ur ID")
+//            region.notifyOnExit = true
+//            region.notifyOnEntry = true
+//            manager.startMonitoring(for: region)
             break
             
         case .authorizedAlways:
             authorizationStatus = .authorizedAlways
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             locationManager.allowsBackgroundLocationUpdates = true
-            if shouldStartMonitoring{
-                locationManager.startUpdatingLocation()
-            } else {
-                locationManager.stopUpdatingLocation()
-            }
+            locationManager.startUpdatingLocation()
             
         case .restricted:  // Location services currently unavailable.
             // Insert code here of what should happen when Location services are NOT authorized
@@ -84,7 +87,18 @@ class LocationDataManager : NSObject, ObservableObject, CLLocationManagerDelegat
         locationManager.startMonitoring(for: region)
         locationManager.requestState(for: region)
         regionIdentifierToCheck = identifier
-//        print(locationManager.monitoredRegions)
+        print("startMonitoring Regions:  \(locationManager.monitoredRegions)")
+        guard let circularRegion = region as? CLCircularRegion else{
+            return
+        }
+        print(CLLocation(latitude: (locationManager.location?.coordinate.latitude)!, longitude: (locationManager.location?.coordinate.longitude)!).distance(from: CLLocation(latitude: circularRegion.center.latitude, longitude: circularRegion.center.longitude)))
+    }
+    
+    func stopMonitoring(region: CLRegion){
+        locationManager.stopMonitoring(for: region)
+        region.notifyOnExit = false
+        region.notifyOnEntry = false
+        print("stopMonitopring Regions:  \(locationManager.monitoredRegions)")
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -114,11 +128,12 @@ class LocationDataManager : NSObject, ObservableObject, CLLocationManagerDelegat
             isInRegion = true
             // Perform specific action for this region identifier
         }
-        
     }
     
     
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
+        
+
         if region.identifier == regionIdentifierToCheck {
             isInRegion = state == .inside
         }
@@ -128,3 +143,4 @@ class LocationDataManager : NSObject, ObservableObject, CLLocationManagerDelegat
 }
 
 
+ 

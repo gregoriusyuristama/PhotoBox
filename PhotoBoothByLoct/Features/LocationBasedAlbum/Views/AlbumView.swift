@@ -14,8 +14,6 @@ struct AlbumView: View {
     @Environment(\.dismiss) var dismiss
     
     @ObservedObject var locationDataManager = LocationDataManager()
-//    @StateObject var locationViewModel = LocationViewModel()
-    //    @State var testLocVM = TestLocViewModel()
     
     @State private var isPresentingConfirm: Bool = false
     @State private var isPresentingRename: Bool = false
@@ -24,6 +22,7 @@ struct AlbumView: View {
     @State private var textFieldText = ""
     @State private var selectedImage: UIImage?
     @State private var region: CLCircularRegion?
+    @State private var isInsideRegion = false
     //    @State public var isInsideRegion = false
     //    @State private var enteredRegion: String = ""
     //    private var cancellables = Set<AnyCancellable>()
@@ -98,14 +97,27 @@ struct AlbumView: View {
             
             
         }
+        .onReceive(locationDataManager.$isInRegion){ newValue in
+            print("new value : \(newValue)")
+            isInsideRegion = newValue
+            
+            guard let circularRegion = region as? CLCircularRegion else{
+                return
+            }
+            
+            if CLLocation(latitude: (locationDataManager.locationManager.location?.coordinate.latitude)!, longitude: (locationDataManager.locationManager.location?.coordinate.longitude)!).distance(from: CLLocation(latitude: circularRegion.center.latitude, longitude: circularRegion.center.longitude)) < 1000{
+                isInsideRegion = true
+            }
+            
+        }
         .navigationTitle("@\(name)")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                if locationDataManager.isInRegion {
-                    NavigationLink{
-                        CameraViewNew(album: self.album)
-                            .toolbar(.hidden, for: .tabBar)
-//                        isShowingAddSheet = true
+                if isInsideRegion{
+                    Button{
+//                        CameraViewNew(album: self.album)
+//                            .toolbar(.hidden, for: .tabBar)
+                        isShowingAddSheet = true
                         //                        ImagePickerView(selectedImage: $selectedImage)
                     }label: {
                         Image(systemName: "camera")
@@ -119,6 +131,7 @@ struct AlbumView: View {
                     }
                 }
             }
+        
             ToolbarItem(placement: .navigationBarTrailing){
                 Menu {
                     Button{
@@ -170,37 +183,33 @@ struct AlbumView: View {
             Text("You are outside photo box location, camera locked")
         }
         .sheet(isPresented: $isShowingAddSheet){
-            ImagePickerView(selectedImage: $selectedImage)
-                .onDisappear{
-                    if let image = selectedImage{
-                        selectedImage = fixOrientation(img: image)
-                        AlbumDataController().addPhoto(album: album, photo: selectedImage!.pngData()!, context: managedObjContext)
-                    }
-                }
+            CameraViewNew(album: self.album)
+                
+//            ImagePickerView(selectedImage: $selectedImage)
+//                .onDisappear{
+//                    if let image = selectedImage{
+//                        selectedImage = fixOrientation(img: image)
+//                        AlbumDataController().addPhoto(album: album, photo: selectedImage!.pngData()!, context: managedObjContext)
+//                    }
+//                }
         }
         .onAppear{
-            locationDataManager.shouldStartMonitoring = true
-            region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: album.latitude, longitude: album.longitude), radius: 1000, identifier: album.idAlbum!.uuidString)
-            locationDataManager.startMonitoring(region: region!, identifier: album.idAlbum!.uuidString)
-            
-            //            locationDataManager.regionEnteredHandler = { region in
-            //                enteredRegion = region
-            //                print(region)
-            //                if enteredRegion == album.idAlbum!.uuidString{
-            //                    isInsideRegion = true
-            //                } else {
-            //                    isInsideRegion = false
-            //                }
-            //            }
-            //                print(locationDataManager.locationManager.monitoredRegions)
-            
-            
-            
-            //            locationDataManager.locationManager.startUpdatingHeading()
+            Task{
+                
+                print(locationDataManager.isInRegion.description)
+                locationDataManager.shouldStartMonitoring = true
+                region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: album.latitude, longitude: album.longitude), radius: 1000, identifier: album.idAlbum!.uuidString)
+                locationDataManager.startMonitoring(region: region!, identifier: album.idAlbum!.uuidString)
+                locationDataManager.locationManager.requestState(for: region!)
+            }
             
         }
         .onDisappear{
-            locationDataManager.shouldStartMonitoring = false
+//            region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: album.latitude, longitude: album.longitude), radius: 1000, identifier: album.idAlbum?.uuidString ?? "")
+            Task{
+                locationDataManager.shouldStartMonitoring = false
+                locationDataManager.stopMonitoring(region: region!)
+            }
             //            let region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: album.latitude, longitude: album.longitude), radius: 1000, identifier: album.idAlbum!.uuidString)
             //            locationDataManager.locationManager.stopMonitoring(for: self.region!)
             //            locationDataManager.locationManager.startMonitoring(for: region)

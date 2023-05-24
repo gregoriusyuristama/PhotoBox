@@ -7,6 +7,8 @@
 
 import SwiftUI
 import AVFoundation
+import Photos
+import os.log
 
 class CameraController: NSObject, ObservableObject {
     private let captureSession = AVCaptureSession()
@@ -16,14 +18,35 @@ class CameraController: NSObject, ObservableObject {
         return AVCaptureDevice.authorizationStatus(for: .video)
     }
     
+    var overlayImages: [UIImage] = []
+    private var currentOverlayIndex = 0
+    
+//    let photoCollection = PhotoCollection(smartAlbum: .smartAlbumUserLibrary)
+    
     @Published var session: AVCaptureSession
     
     override init() {
         session = captureSession
+        self.overlayImages = [
+            UIImage(named: "emptyOverlay")!,
+            UIImage(named: "testOverlay")!,
+            UIImage(named: "testOverlay2")!,
+            UIImage(named: "testOverlay3")!,
+            UIImage(named: "testOverlay4")!,
+            UIImage(named: "testOverlay5")!,
+        ]
         super.init()
         
         setupCaptureSession()
         checkCameraAuthorizationStatus()
+    }
+    
+    func setCurrentOverlay(index: Int) {
+        guard index >= 0 && index < overlayImages.count else {
+            return
+        }
+        
+        currentOverlayIndex = index
     }
     
     func setupCaptureSession() {
@@ -73,7 +96,7 @@ class CameraController: NSObject, ObservableObject {
         
         captureSession.commitConfiguration()
     }
-
+    
     
     func checkCameraAuthorizationStatus() {
         switch cameraAuthorizationStatus {
@@ -100,7 +123,7 @@ class CameraController: NSObject, ObservableObject {
                 captureSession.startRunning()
             }
         }
-       
+        
     }
     
     func stopSession() {
@@ -141,7 +164,7 @@ class CameraController: NSObject, ObservableObject {
         
         captureSession.commitConfiguration()
     }
-
+    
     func findCamera(with position: AVCaptureDevice.Position) -> AVCaptureDevice? {
         let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera],
                                                                 mediaType: .video,
@@ -155,7 +178,7 @@ class CameraController: NSObject, ObservableObject {
         
         return nil
     }
-
+    
     
     func capturePhoto(completion: @escaping (UIImage) -> Void) {
         guard let connection = photoOutput.connection(with: .video), connection.isVideoOrientationSupported else {
@@ -185,10 +208,36 @@ extension CameraController: AVCapturePhotoCaptureDelegate {
         if let imageData = photo.fileDataRepresentation(), let capturedImage = UIImage(data: imageData) {
             // Do any necessary post-processing or modifications to the captured image here
             // Pass the captured image to the completion handler
-            DispatchQueue.main.async { [self] in
-                completion?(capturedImage)
-            }
+            
+//            if let overlayImage =  {
+                let compositeImage = drawOverlayImage(overlayImages[currentOverlayIndex], on: capturedImage)
+                completion?(compositeImage!)
+////                savePhotoToLibrary(compositeImage!)
+//            }
+//            else {
+//                completion?(capturedImage)
+////                savePhotoToLibrary(capturedImage)
+//            }
+            //            DispatchQueue.main.async { [self] in
+            //                completion?(capturedImage)
+            //            }
         }
+    }
+    
+    private func drawOverlayImage(_ overlayImage: UIImage, on baseImage: UIImage) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(baseImage.size, false, baseImage.scale)
+        baseImage.draw(in: CGRect(origin: .zero, size: baseImage.size))
+        
+        let overlaySize = CGSize(width: baseImage.size.width, height: baseImage.size.height)
+        overlayImage.draw(in: CGRect(origin: .zero, size: overlaySize))
+        
+        let compositeImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return compositeImage
     }
 }
 
+
+
+fileprivate let logger = Logger(subsystem: "gregoriusyuristama.cameraController", category: "CameraController")

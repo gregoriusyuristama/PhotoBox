@@ -16,7 +16,6 @@ class AlbumDataController: ObservableObject {
             if let error = error {
                 print("Failed to load data \(error.localizedDescription)")
             }
-            
             self.container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         }
     }

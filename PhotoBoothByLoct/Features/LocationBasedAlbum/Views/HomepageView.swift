@@ -29,7 +29,7 @@ struct HomepageView: View {
                 .tag(Tab.mapView)
         }
         .sheet(isPresented: $isShowingWelcomePage){
-            GeometryReader{geo in
+            GeometryReader{ geo in
                 VStack{
                     HStack{
                         Spacer()
