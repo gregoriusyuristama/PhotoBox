@@ -11,21 +11,22 @@ import Photos
 struct CameraViewNew: View {
     @Environment(\.managedObjectContext) var managedObjContext
     @Environment(\.dismiss) var dismiss
-    @ObservedObject private var cameraController = CameraController()
+    //    @StateObject private var cameraController = CameraController()
+    @StateObject private var model = DataModel()
     @ObservedObject var locationDataManager = LocationDataManager()
     @State private var capturedImage: UIImage?
     @State private var selectedOverlayIndex = 0
     var album: Album?
     
     var body: some View {
-        ZStack{
-            Rectangle()
-                .fill(.black)
-                .frame(width: .infinity, height: .infinity)
-                .ignoresSafeArea()
-            VStack {
-                if let image = capturedImage {
-                    VStack{
+        GeometryReader{ geo in
+            ZStack{
+                Rectangle()
+                    .fill(.black)
+                    .frame(width: geo.size.width, height: geo.size.height)
+                    .ignoresSafeArea()
+                VStack {
+                    if let image = capturedImage {
                         
                         Image(uiImage: image)
                             .resizable()
@@ -42,120 +43,194 @@ struct CameraViewNew: View {
                                         Text("Save Photo")
                                     }
                                 }
+                            }                           .onAppear {
+                                model.camera.isPreviewPaused = true
                             }
-                        Button{
-                            let fixedPhoto = fixOrientation(img: capturedImage!)
-                            AlbumDataController().addPhoto(album: album!, photo: fixedPhoto.pngData()!, context: managedObjContext)
-                            savePhotoToLibrary(fixedPhoto)
-                            dismiss()
-                            
-                        }label: {
-                            Text("Save Photo")
-                        }
-                    }
-                } else {
-                    ZStack{
-                        CameraPreview(session: cameraController.session)
-                            .frame(width: 300, height: 400)
-                            .mask{
-                                Rectangle()
-                                    .frame(width: 300, height: 400)
-                                    .cornerRadius(30)
+                            .onDisappear {
+                                model.camera.isPreviewPaused = false
                             }
-                        Image(uiImage: cameraController.overlayImages[selectedOverlayIndex])
-                            .resizable()
-                            .frame(width: 300, height: 400)
-                            .aspectRatio(contentMode: .fit)
-                            .mask{
-                                Rectangle()
-                                    .frame(width: 300, height: 400)
-                                    .cornerRadius(30)
-                            }
-                    }
-                    
-                    Picker(selection: $selectedOverlayIndex, label: Text("Overlay Image")){
-                        ForEach(0..<cameraController.overlayImages.count, id: \.self){ index in
-                            Text("\(index + 1)")
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .padding()
-                    .onChange(of: selectedOverlayIndex) { newValue in
-                        cameraController.setCurrentOverlay(index: newValue)
-                    }
-                    
-                    HStack{
-                        Button{
-                            dismiss()
-                        }label: {
-                            if let image = album?.photos.last?.photo{
-                                Image(uiImage: UIImage(data: image)!)
-                                    .resizable()
-                                    .frame(width: 60, height: 60)
-                                    .mask{
-                                        Rectangle()
-                                            .frame(width: 60, height: 60)
-                                            .cornerRadius(10)
-                                    }
-                                    .padding(.leading, 46)
-                            }else {
-                                Image("noPhotos")
-                                    .resizable()
-                                    .frame(width: 60, height: 60)
-                                    .mask{
-                                        Rectangle()
-                                            .frame(width: 60, height: 60)
-                                            .cornerRadius(10)
-                                    }
-                                    .padding(.leading, 46)
-                            }
-                        }
-                        Spacer()
-                        Button{
-                            cameraController.capturePhoto { image in
-                                capturedImage = image
-                            }
-                        }label: {
-                            Circle()
-                                .fill(.white)
-                            //                        .stroke(lineWidth: 1)
-                                .frame(width: 95, height: 95)
-                                .overlay{
-                                    Circle()
-                                        .stroke(lineWidth: 1)
-                                        .foregroundColor(.black)
-                                        .frame(width: 86, height: 86)
+                    } else {
+                        //                        let camSession = cameraController.session
+                        ZStack{
+                            //                            CameraPreview(session: camSession)
+                            //                                .frame(width: 300, height: 400)
+                            //                                .mask{
+                            //                                    Rectangle()
+                            //                                        .frame(width: 300, height: 400)
+                            //                                        .cornerRadius(30)
+                            //                                }
+                            ViewfinderView(image:  $model.viewfinderImage )
+                                .background(.black)
+                                .frame(width: 300, height: 400)
+                                .mask{
+                                    Rectangle()
+                                        .frame(width: 300, height: 400)
+                                        .cornerRadius(30)
+                                }
+                            Image(uiImage: model.camera.overlayImages[selectedOverlayIndex])
+                                .resizable()
+                                .frame(width: 300, height: 400)
+                                .aspectRatio(contentMode: .fit)
+                                .mask{
+                                    Rectangle()
+                                        .frame(width: 300, height: 400)
+                                        .cornerRadius(30)
                                 }
                         }
-                        Spacer()
-                        Button{
-                            cameraController.flipCamera()
-                        }label: {
-                            Text("\(Image(systemName: "arrow.triangle.2.circlepath.camera"))")
-                                .font(.system(size: 34))
-                                .padding(.trailing, 46)
-                                .foregroundColor(.white)
+                        
+                        //                        Picker(selection: $selectedOverlayIndex, label: Text("Overlay Image")){
+                        //                            ForEach(0..<cameraController.overlayImages.count, id: \.self){ index in
+                        //                                Text("\(index + 1)")
+                        //                            }
+                        //                        }
+                        //                        .pickerStyle(.segmented)
+                        //                        .padding()
+                        //                        .onChange(of: selectedOverlayIndex) { newValue in
+                        //                            cameraController.setCurrentOverlay(index: newValue)
+                        //                        }
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(0..<self.model.camera.overlayImages.count, id: \.self) { i in
+                                    
+                                    ZStack{
+//                                        Image("noPhotos")
+//                                            .resizable()
+//                                            .frame(width: 70, height: 70)
+                                        //                                            .mask{
+                                        //                                                Rectangle()
+                                        //                                                    .frame(width: 300, height: 400)
+                                        //                                                    .cornerRadius(30)
+                                        //                                            }
+                                        ViewfinderView(image:  $model.viewfinderImage )
+                                            .background(.black)
+                                            .frame(width: 70, height: 70)
+                                            .mask{
+                                                Rectangle()
+                                                    .frame(width: 300, height: 70)
+                                                    .cornerRadius(10)
+                                            }
+                                        
+                                        Image(uiImage: model.camera.overlayImages[i])
+                                            .resizable()
+                                            .frame(width: 70, height: 70)
+                                            .gesture(TapGesture().onEnded({ self.selectedOverlayIndex = i }))
+                                    }
+                                    .mask{
+                                        Rectangle()
+                                            .frame(width: 70, height: 70)
+                                            .cornerRadius(10)
+                                    }
+                                    .overlay{
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .strokeBorder(lineWidth: 2)
+                                            .foregroundColor(.yellow)
+                                            .frame(width: 70, height: 70)
+                                            .opacity(self.selectedOverlayIndex == i ? 1 : 0)
+                                    }
+                                    
+                                    
+                                    //                                    Text("\(i)")
+                                    //                                        .foregroundColor(self.selectedOverlayIndex == i ? .red : .white)
+                                    //                                        .frame(width: 20, height: 20)
+                                                                            .gesture(TapGesture().onEnded({ self.selectedOverlayIndex = i }))
+                                }
+                            }
                         }
+                        .frame(maxHeight: 80)
+                        .padding(.vertical, 30)
+                        .onChange(of: selectedOverlayIndex){ newValue in
+                            model.camera.setCurrentOverlay(index: newValue)
+                        }
+                        
+                        
+                        HStack{
+                            Button{
+                                dismiss()
+                            }label: {
+                                if let image = album?.photos.last?.photo{
+                                    if let compressedData = UIImage(data: image)?.jpegData(compressionQuality: 0.0){
+                                        Image(uiImage: UIImage(data: compressedData)!)
+                                            .resizable()
+                                            .frame(width: 60, height: 60)
+                                            .mask{
+                                                Rectangle()
+                                                    .frame(width: 60, height: 60)
+                                                    .cornerRadius(10)
+                                            }
+                                            .padding(.leading, 46)
+                                    }
+                                }else {
+                                    Image("noPhotos")
+                                        .resizable()
+                                        .frame(width: 60, height: 60)
+                                        .mask{
+                                            Rectangle()
+                                                .frame(width: 60, height: 60)
+                                                .cornerRadius(10)
+                                        }
+                                        .padding(.leading, 46)
+                                }
+                            }
+                            Spacer()
+                            Button{
+                                model.camera.takePhoto { image in
+                                    capturedImage = image
+                                }
+                            }label: {
+                                Circle()
+                                    .fill(.white)
+                                //                        .stroke(lineWidth: 1)
+                                    .frame(width: 95, height: 95)
+                                    .overlay{
+                                        Circle()
+                                            .stroke(lineWidth: 1)
+                                            .foregroundColor(.black)
+                                            .frame(width: 86, height: 86)
+                                    }
+                            }
+                            Spacer()
+                            Button{
+                                model.camera.switchCaptureDevice()
+                            }label: {
+                                Text("\(Image(systemName: "arrow.triangle.2.circlepath.camera"))")
+                                    .font(.system(size: 34))
+                                    .padding(.trailing, 46)
+                                    .foregroundColor(.white)
+                            }
+                        }
+                        
+                        .padding(.bottom,50)
                     }
+                    
+                    
+                    //            Button("Flip") {
+                    //                cameraController.flipCamera()
+                    //            }
+                    
+                    //            Button("Capture") {
+                    //                cameraController.capturePhoto { image in
+                    //                    capturedImage = image
+                    //                }
+                    //            }
                 }
-                
-                
-                //            Button("Flip") {
-                //                cameraController.flipCamera()
-                //            }
-                
-                //            Button("Capture") {
-                //                cameraController.capturePhoto { image in
-                //                    capturedImage = image
-                //                }
-                //            }
             }
-            .onAppear {
-                cameraController.startSession()
+            //            .onAppear {
+            //                cameraController.startSession()
+            //            }
+            //            .onDisappear {
+            //                cameraController.stopSession()
+            //            }
+            
+            .task {
+                await model.camera.start()
+//                await model.loadPhotos()
+//                await model.loadThumbnail()
             }
-            .onDisappear {
-                cameraController.stopSession()
+            .onDisappear{
+                model.camera.stop()
             }
+            
         }
         
     }

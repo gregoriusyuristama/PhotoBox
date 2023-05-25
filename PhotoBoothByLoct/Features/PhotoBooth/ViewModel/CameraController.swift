@@ -26,7 +26,6 @@ class CameraController: NSObject, ObservableObject {
     @Published var session: AVCaptureSession
     
     override init() {
-        session = captureSession
         self.overlayImages = [
             UIImage(named: "emptyOverlay")!,
             UIImage(named: "testOverlay")!,
@@ -35,6 +34,8 @@ class CameraController: NSObject, ObservableObject {
             UIImage(named: "testOverlay4")!,
             UIImage(named: "testOverlay5")!,
         ]
+        
+        session = captureSession
         super.init()
         
         setupCaptureSession()

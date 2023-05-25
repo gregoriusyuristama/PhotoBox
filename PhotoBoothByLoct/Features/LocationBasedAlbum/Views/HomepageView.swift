@@ -33,7 +33,7 @@ struct HomepageView: View {
                 VStack{
                     HStack{
                         Spacer()
-                        Text("Welcome to\nPhotoBox")
+                        Text("Welcome to\nGeoBooth")
                             .font(.largeTitle)
                             .bold()
                             .padding(.top, geo.size.height*0.08)

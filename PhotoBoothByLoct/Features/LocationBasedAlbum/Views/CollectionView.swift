@@ -45,7 +45,7 @@ struct CollectionView: View {
                 }
                 
             }
-            .navigationTitle("Photo Box")
+            .navigationTitle("GeoBooth")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button{

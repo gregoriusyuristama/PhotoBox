@@ -28,7 +28,7 @@ struct AlbumView: View {
     //    private var cancellables = Set<AnyCancellable>()
     
     var name: String
-    var album: Album!
+    var album: Album?
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible()),
@@ -36,76 +36,52 @@ struct AlbumView: View {
     ]
     var body: some View {
         Group{
-            if album.photos.isEmpty{
+            if let alb = album{
+                ScrollView{
+                    LazyVGrid(columns: columns, spacing: 1){
+                        ForEach(alb.photos){ photos in
+                            NavigationLink{
+                                DetailedPhotoView(photo: photos)
+                            }label: {
+                                
+                                if let displayedPhoto = photos.photo {
+                                    let compressionQuality: CGFloat = 0.0
+                                    if let compressedData = UIImage(data: displayedPhoto)?.jpegData(compressionQuality: compressionQuality){
+                                        Image(uiImage: UIImage(data: compressedData)!)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 130, height: 130)
+                                            .mask{
+                                                Rectangle()
+                                                    .frame(width: 130, height: 130)
+                                            }
+                                    }
+                                }
+                                
+                            }
+                            //
+                            
+                        }
+                    }
+                }
+            }
+            else{
                 VStack{
                     Spacer()
                     EmptyAlbumView()
                     Spacer()
                 }
-            } else {
-                ScrollView{
-                    LazyVGrid(columns: columns, spacing: 1){
-                        ForEach(album.photos){ photo in
-                            NavigationLink{
-                                DetailedPhotoView(photo: photo)
-                            }label: {
-                                Image(uiImage: UIImage(data: photo.photo!)!)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 130, height: 130)
-                                    .mask{
-                                        Rectangle()
-                                            .frame(width: 130, height: 130)
-                                    }
-                            }
-                        }
-                    }
-                }
             }
-            //                Text("latitude: \(album.latitude)")
-            //                Text("latitude: \(album.longitude)")
-            //                Text(locationDataManager.isInRegion ? "Inside Region" : "Outside Region")
-            //                switch locationDataManager.locationManager.authorizationStatus {
-            //                case .authorizedWhenInUse:  // Location services are available.
-            //                    // Insert code here of what should happen when Location services are authorized
-            //                    Text("Your current location is:")
-            //                    Text("Latitude: \(locationDataManager.locationManager.location?.coordinate.latitude.description ?? "Error loading")")
-            //                    Text("Longitude: \(locationDataManager.locationManager.location?.coordinate.longitude.description ?? "Error loading")")
-            //                    Button{
-            //                        locationDataManager.locationManager.startUpdatingLocation()
-            //                        locationViewModel.latitude = (locationDataManager.locationManager.location?.coordinate.latitude.description)!
-            //                        locationViewModel.longitude = (locationDataManager.locationManager.location?.coordinate.longitude.description)!
-            //                        //                    locationViewModel.saveResult()
-            //                    }label: {
-            //                        Text("Refresh Location")
-            //                    }
-            //
-            //                case .restricted, .denied:  // Location services currently unavailable.
-            //                    // Insert code here of what should happen when Location services are NOT authorized
-            //                    Text("Current location data was restricted or denied.")
-            //                case .notDetermined:        // Authorization not determined yet.
-            //                    Text("Finding your location...")
-            //                    ProgressView()
-            //                default:
-            //                    ProgressView()
-            //                }
-            //
-            //                Text("Region: \(locationDataManager.isInRegion ? locationDataManager.regionIdentifierToCheck! : String("Test"))")
-            
-            
-            
-            
-            
         }
         .onReceive(locationDataManager.$isInRegion){ newValue in
             print("new value : \(newValue)")
             isInsideRegion = newValue
             
-            guard let circularRegion = region as? CLCircularRegion else{
+            guard let circularRegion = region else{
                 return
             }
             
-            if CLLocation(latitude: (locationDataManager.locationManager.location?.coordinate.latitude)!, longitude: (locationDataManager.locationManager.location?.coordinate.longitude)!).distance(from: CLLocation(latitude: circularRegion.center.latitude, longitude: circularRegion.center.longitude)) < 1000{
+            if CLLocation(latitude: (locationDataManager.locationManager.location?.coordinate.latitude)!, longitude: (locationDataManager.locationManager.location?.coordinate.longitude)!).distance(from: CLLocation(latitude: circularRegion.center.latitude, longitude: circularRegion.center.longitude)) < 150{
                 isInsideRegion = true
             }
             
@@ -114,10 +90,11 @@ struct AlbumView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 if isInsideRegion{
-                    Button{
-//                        CameraViewNew(album: self.album)
-//                            .toolbar(.hidden, for: .tabBar)
-                        isShowingAddSheet = true
+                    NavigationLink{
+                        CameraViewNew(album: self.album)
+                        //                        CameraView()
+                            .toolbar(.hidden, for: .tabBar)
+                        //                        isShowingAddSheet = true
                         //                        ImagePickerView(selectedImage: $selectedImage)
                     }label: {
                         Image(systemName: "camera")
@@ -131,7 +108,7 @@ struct AlbumView: View {
                     }
                 }
             }
-        
+            
             ToolbarItem(placement: .navigationBarTrailing){
                 Menu {
                     Button{
@@ -162,7 +139,7 @@ struct AlbumView: View {
         }
         .confirmationDialog("Are you sure want to delete this album?", isPresented: $isPresentingConfirm){
             Button(role: .destructive){
-                AlbumDataController().deleteAlbum(album: album, context: managedObjContext)
+                AlbumDataController().deleteAlbum(album: album!, context: managedObjContext)
                 dismiss()
             }label: {
                 Text("Delete Album")
@@ -174,7 +151,7 @@ struct AlbumView: View {
             TextField("New album name", text: $textFieldText)
             Button("OK"){
                 if !textFieldText.isEmpty{
-                    AlbumDataController().editAlbum(album: album, name: textFieldText, context: managedObjContext)
+                    AlbumDataController().editAlbum(album: album!, name: textFieldText, context: managedObjContext)
                 }
             }
         }
@@ -183,36 +160,30 @@ struct AlbumView: View {
             Text("You are outside photo box location, camera locked")
         }
         .sheet(isPresented: $isShowingAddSheet){
-            CameraViewNew(album: self.album)
-                
-//            ImagePickerView(selectedImage: $selectedImage)
-//                .onDisappear{
-//                    if let image = selectedImage{
-//                        selectedImage = fixOrientation(img: image)
-//                        AlbumDataController().addPhoto(album: album, photo: selectedImage!.pngData()!, context: managedObjContext)
-//                    }
-//                }
+            //            CameraViewNew(album: self.album)
+            
+            ImagePickerView(selectedImage: $selectedImage)
+                .onDisappear{
+                    if let image = selectedImage{
+                        selectedImage = fixOrientation(img: image)
+                        AlbumDataController().addPhoto(album: album!, photo: selectedImage!.pngData()!, context: managedObjContext)
+                    }
+                }
         }
         .onAppear{
             Task{
-                
                 print(locationDataManager.isInRegion.description)
                 locationDataManager.shouldStartMonitoring = true
-                region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: album.latitude, longitude: album.longitude), radius: 1000, identifier: album.idAlbum!.uuidString)
-                locationDataManager.startMonitoring(region: region!, identifier: album.idAlbum!.uuidString)
-                locationDataManager.locationManager.requestState(for: region!)
+                region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: album!.latitude, longitude: album!.longitude), radius: 150, identifier: album!.idAlbum!.uuidString)
+                locationDataManager.startMonitoring(region: region!, identifier: album!.idAlbum!.uuidString)
             }
             
         }
         .onDisappear{
-//            region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: album.latitude, longitude: album.longitude), radius: 1000, identifier: album.idAlbum?.uuidString ?? "")
             Task{
                 locationDataManager.shouldStartMonitoring = false
                 locationDataManager.stopMonitoring(region: region!)
             }
-            //            let region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: album.latitude, longitude: album.longitude), radius: 1000, identifier: album.idAlbum!.uuidString)
-            //            locationDataManager.locationManager.stopMonitoring(for: self.region!)
-            //            locationDataManager.locationManager.startMonitoring(for: region)
         }
         
         

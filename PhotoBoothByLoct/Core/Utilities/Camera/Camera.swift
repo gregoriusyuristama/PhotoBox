@@ -14,9 +14,15 @@ class Camera: NSObject {
     private var photoOutput: AVCapturePhotoOutput?
     private var videoOutput: AVCaptureVideoDataOutput?
     private var sessionQueue: DispatchQueue!
+    private var completion: ((UIImage) -> Void)?
+    
+    
+    var overlayImages: [UIImage] = []
+    
+    private var currentOverlayIndex = 0
     
     private var allCaptureDevices: [AVCaptureDevice] {
-        AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInTrueDepthCamera, .builtInDualCamera, .builtInDualWideCamera, .builtInWideAngleCamera, .builtInDualWideCamera], mediaType: .video, position: .unspecified).devices
+        AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInTrueDepthCamera,  .builtInWideAngleCamera], mediaType: .video, position: .unspecified).devices
     }
     
     private var frontCaptureDevices: [AVCaptureDevice] {
@@ -110,6 +116,14 @@ class Camera: NSObject {
         
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         NotificationCenter.default.addObserver(self, selector: #selector(updateForDeviceOrientation), name: UIDevice.orientationDidChangeNotification, object: nil)
+        self.overlayImages = [
+            UIImage(named: "emptyOverlay")!,
+            UIImage(named: "testOverlay")!,
+            UIImage(named: "testOverlay2")!,
+            UIImage(named: "testOverlay3")!,
+            UIImage(named: "testOverlay4")!,
+            UIImage(named: "testOverlay5")!,
+        ]
     }
     
     private func configureCaptureSession(completionHandler: (_ success: Bool) -> Void) {
@@ -159,8 +173,8 @@ class Camera: NSObject {
         self.photoOutput = photoOutput
         self.videoOutput = videoOutput
         
-        photoOutput.isHighResolutionCaptureEnabled = true
-        photoOutput.maxPhotoQualityPrioritization = .quality
+        photoOutput.isHighResolutionCaptureEnabled = false
+        photoOutput.maxPhotoQualityPrioritization = .balanced
         
         updateVideoOutputConnection()
         
@@ -296,7 +310,7 @@ class Camera: NSObject {
         }
     }
     
-    func takePhoto() {
+    func takePhoto(completion: @escaping (UIImage) -> Void) {
         guard let photoOutput = self.photoOutput else { return }
         
         sessionQueue.async {
@@ -309,7 +323,7 @@ class Camera: NSObject {
             
             let isFlashAvailable = self.deviceInput?.device.isFlashAvailable ?? false
             photoSettings.flashMode = isFlashAvailable ? .auto : .off
-            photoSettings.isHighResolutionPhotoEnabled = true
+            photoSettings.isHighResolutionPhotoEnabled = false
             if let previewPhotoPixelFormatType = photoSettings.availablePreviewPhotoPixelFormatTypes.first {
                 photoSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: previewPhotoPixelFormatType]
             }
@@ -324,9 +338,18 @@ class Camera: NSObject {
             
             photoOutput.capturePhoto(with: photoSettings, delegate: self)
             
+            self.completion = completion
 //            return photoOutput
 //            print("Photo Output : \(photoOutput)")
         }
+    }
+    
+    func setCurrentOverlay(index: Int) {
+        guard index >= 0 && index < overlayImages.count else {
+            return
+        }
+        
+        currentOverlayIndex = index
     }
 }
 
@@ -350,8 +373,25 @@ extension Camera: AVCapturePhotoCaptureDelegate {
             return
         }
         
+        if let imageData = photo.fileDataRepresentation(), let capturedImage = UIImage(data: imageData){
+            completion?(drawOverlayImage(overlayImages[currentOverlayIndex], on: capturedImage)!)
+            
+        }
         
+       
         addToPhotoStream?(photo)
+    }
+    private func drawOverlayImage(_ overlayImage: UIImage, on baseImage: UIImage) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(baseImage.size, false, baseImage.scale)
+        baseImage.draw(in: CGRect(origin: .zero, size: baseImage.size))
+        
+        let overlaySize = CGSize(width: baseImage.size.width, height: baseImage.size.height)
+        overlayImage.draw(in: CGRect(origin: .zero, size: overlaySize))
+        
+        let compositeImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return compositeImage
     }
 }
 

@@ -34,7 +34,6 @@
 		B63BB5172A1A1A17000AF241 /* AlbumDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63BB5162A1A1A17000AF241 /* AlbumDataController.swift */; };
 		B63BB5192A1A1BCB000AF241 /* AddAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63BB5182A1A1BCB000AF241 /* AddAlbumView.swift */; };
 		B654D9042A14D89900F633CE /* PhotoBoothByLoctApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B654D9032A14D89900F633CE /* PhotoBoothByLoctApp.swift */; };
-		B654D9062A14D89900F633CE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B654D9052A14D89900F633CE /* ContentView.swift */; };
 		B654D9082A14D89A00F633CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B654D9072A14D89A00F633CE /* Assets.xcassets */; };
 		B654D90B2A14D89A00F633CE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B654D90A2A14D89A00F633CE /* Preview Assets.xcassets */; };
 		B654D91A2A14DA7800F633CE /* LocationDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B654D9192A14DA7700F633CE /* LocationDataManager.swift */; };
@@ -80,7 +79,6 @@
 		B63BB5182A1A1BCB000AF241 /* AddAlbumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAlbumView.swift; sourceTree = "<group>"; };
 		B654D9002A14D89900F633CE /* PhotoBoothByLoct.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoBoothByLoct.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B654D9032A14D89900F633CE /* PhotoBoothByLoctApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoBoothByLoctApp.swift; sourceTree = "<group>"; };
-		B654D9052A14D89900F633CE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B654D9072A14D89A00F633CE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B654D90A2A14D89A00F633CE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		B654D9192A14DA7700F633CE /* LocationDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDataManager.swift; sourceTree = "<group>"; };
@@ -158,7 +156,6 @@
 				B654D9132A14DA4200F633CE /* Application */,
 				B654D9122A14DA3900F633CE /* Core */,
 				B654D9112A14D8FD00F633CE /* Features */,
-				B654D9052A14D89900F633CE /* ContentView.swift */,
 				B654D9092A14D89A00F633CE /* Preview Content */,
 			);
 			path = PhotoBoothByLoct;
@@ -460,7 +457,6 @@
 				B6AA4A832A16859400CF58FA /* HomepageView.swift in Sources */,
 				B63BB5122A1813B3000AF241 /* MapViewRepresentable.swift in Sources */,
 				B63BB4FD2A180B68000AF241 /* CachedImageManager.swift in Sources */,
-				B654D9062A14D89900F633CE /* ContentView.swift in Sources */,
 				B6128CD92A1B5DF600581608 /* ImagePicker.swift in Sources */,
 				B6B80B122A174E1E00E8C94A /* CameraViewModel.swift in Sources */,
 				B6AA4A892A168F1F00CF58FA /* MapView.swift in Sources */,
@@ -609,8 +605,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoBoothByLoct/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = PhotoBox;
-				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_CFBundleDisplayName = GeoBooth;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				INFOPLIST_KEY_NSCameraUsageDescription = "App need to use camera to capture photo";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "App need to use location";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "need to use location";
@@ -650,8 +646,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoBoothByLoct/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = PhotoBox;
-				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_CFBundleDisplayName = GeoBooth;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				INFOPLIST_KEY_NSCameraUsageDescription = "App need to use camera to capture photo";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "App need to use location";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "need to use location";
