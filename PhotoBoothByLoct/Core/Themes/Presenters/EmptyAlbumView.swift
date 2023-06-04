@@ -10,10 +10,10 @@ import SwiftUI
 struct EmptyAlbumView: View {
     var body: some View {
         VStack{
-            Text("No Collection")
+            Text(Prompt.Empty.noPhotosTitle)
                 .padding(.bottom, 5)
                 .font(.headline)
-            Text("You can add new photos when on album location and by tapping button \(Image(systemName: "camera")) above")
+            Text(Prompt.Empty.noPhotosCaption)
                 .multilineTextAlignment(.center)
                 .font(.caption)
                 .foregroundColor(.gray)

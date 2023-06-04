@@ -48,7 +48,7 @@ struct MapView: View {
                 }
                 
             }
-            .navigationTitle("Places of Memories")
+            .navigationTitle(Prompt.Title.mapViewTitle)
         }
     }
 }

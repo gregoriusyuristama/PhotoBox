@@ -35,7 +35,7 @@ struct DetailedPhotoView: View {
                 }
             }
         }
-        .confirmationDialog("Delete Photo", isPresented: $isShowingDeleteConfirmation){
+        .confirmationDialog(Prompt.DetailedPhoto.deletePrompt, isPresented: $isShowingDeleteConfirmation){
             Button(role: .destructive){
                 AlbumDataController().deletePhoto(photo: photo, context: managedObjContext)
                 dismiss()
@@ -45,7 +45,7 @@ struct DetailedPhotoView: View {
 //                AlbumDataController().deleteAlbum(album: album, context: managedObjContext)
 //                dismiss()
             }label: {
-                Text("Delete Photo")
+                Text(Prompt.DetailedPhoto.deletePrompt)
             }
         }
 

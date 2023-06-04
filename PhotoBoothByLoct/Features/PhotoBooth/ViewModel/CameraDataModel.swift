@@ -6,17 +6,14 @@ import AVFoundation
 import SwiftUI
 import os.log
 
-final class DataModel: ObservableObject {
+final class CameraDataModel: ObservableObject {
     @Environment(\.managedObjectContext) var managedObjContext
     let camera = Camera()
     let photoCollection = PhotoCollection(smartAlbum: .smartAlbumUserLibrary)
-//    let album: Album?
-    
     
     @Published var viewfinderImage: Image?
     @Published var thumbnailImage: Image?
     
-    var isPhotosLoaded = false
     
     init() {
         Task {
@@ -80,23 +77,23 @@ final class DataModel: ObservableObject {
     }
     
     func loadPhotos() async {
-        guard !isPhotosLoaded else { return }
+//        guard !isPhotosLoaded else { return }
+//
+//        let authorized = await PhotoLibrary.checkAuthorization()
+//        guard authorized else {
+//            logger.error("Photo library access was not authorized.")
+//            return
+//        }
         
-        let authorized = await PhotoLibrary.checkAuthorization()
-        guard authorized else {
-            logger.error("Photo library access was not authorized.")
-            return
-        }
-        
-        Task {
-            do {
-                try await self.photoCollection.load()
-                await self.loadThumbnail()
-            } catch let error {
-                logger.error("Failed to load photo collection: \(error.localizedDescription)")
-            }
-            self.isPhotosLoaded = true
-        }
+//        Task {
+//            do {
+//                try await self.photoCollection.load()
+//                await self.loadThumbnail()
+//            } catch let error {
+//                logger.error("Failed to load photo collection: \(error.localizedDescription)")
+//            }
+//            self.isPhotosLoaded = true
+//        }
     }
     
     func loadThumbnail() async {

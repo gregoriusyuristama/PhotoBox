@@ -118,7 +118,12 @@ class Camera: NSObject {
         NotificationCenter.default.addObserver(self, selector: #selector(updateForDeviceOrientation), name: UIDevice.orientationDidChangeNotification, object: nil)
         self.overlayImages = [
             UIImage(named: "emptyOverlay")!,
-            UIImage(named: "testOverlay")!,
+            UIImage(named: "Overlay1")!,
+            UIImage(named: "Overlay2")!,
+            UIImage(named: "Overlay3")!,
+            UIImage(named: "Overlay4")!,
+            UIImage(named: "Overlay5")!,
+            UIImage(named: "Overlay6")!,
             UIImage(named: "testOverlay2")!,
             UIImage(named: "testOverlay3")!,
             UIImage(named: "testOverlay4")!,

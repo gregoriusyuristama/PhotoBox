@@ -47,12 +47,6 @@ class AlbumDataController: ObservableObject {
     func deleteAlbum(album: Album, context: NSManagedObjectContext){
         context.delete(album)
         save(context: context)
-//        do{
-//            try context.save()
-////            dismiss()
-//        }catch{
-//            print(error)
-//        }
     }
     
     func addPhoto(album: Album, photo: Data, context: NSManagedObjectContext){
@@ -62,6 +56,22 @@ class AlbumDataController: ObservableObject {
         newPhoto.photo = photo
         save(context: context)
     }
+    
+    func addNewPhotoWithID(withID id: String, photo: Data, context: NSManagedObjectContext) {
+//           let context = persistentContainer.viewContext
+
+        let fetchRequest: NSFetchRequest<Album> = Album.fetchRequest()
+           fetchRequest.predicate = NSPredicate(format: "id == %@", id)
+        
+           if let existingAlbum = try? context.fetch(fetchRequest).first {
+               // Item with the given ID already exists, you can update its properties if needed.
+               // For example: existingItem.name = newName
+               let newPhoto = Photos(context: context)
+               newPhoto.id = UUID()
+               newPhoto.photo = photo
+               save(context: context)
+           }
+       }
     
     func deletePhoto(photo: Photos, context: NSManagedObjectContext){
         context.delete(photo)

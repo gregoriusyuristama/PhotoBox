@@ -36,14 +36,13 @@ struct AlbumView: View {
     ]
     var body: some View {
         Group{
-            if let alb = album{
+            if let alb = album {
                 ScrollView{
                     LazyVGrid(columns: columns, spacing: 1){
                         ForEach(alb.photos){ photos in
                             NavigationLink{
                                 DetailedPhotoView(photo: photos)
                             }label: {
-                                
                                 if let displayedPhoto = photos.photo {
                                     let compressionQuality: CGFloat = 0.0
                                     if let compressedData = UIImage(data: displayedPhoto)?.jpegData(compressionQuality: compressionQuality){
@@ -57,10 +56,7 @@ struct AlbumView: View {
                                             }
                                     }
                                 }
-                                
                             }
-                            //
-                            
                         }
                     }
                 }
@@ -92,10 +88,7 @@ struct AlbumView: View {
                 if isInsideRegion{
                     NavigationLink{
                         CameraViewNew(album: self.album)
-                        //                        CameraView()
                             .toolbar(.hidden, for: .tabBar)
-                        //                        isShowingAddSheet = true
-                        //                        ImagePickerView(selectedImage: $selectedImage)
                     }label: {
                         Image(systemName: "camera")
                     }
@@ -115,7 +108,7 @@ struct AlbumView: View {
                         isPresentingRename = true
                     }label: {
                         HStack{
-                            Text("Rename Album")
+                            Text(Prompt.AlbumView.renameTitle)
                             Spacer()
                             Image(systemName: "pencil")
                         }
@@ -125,7 +118,7 @@ struct AlbumView: View {
                         isPresentingConfirm = true
                     }label: {
                         HStack{
-                            Text("Delete Album")
+                            Text(Prompt.AlbumView.deleteTitle)
                             Spacer()
                             Image(systemName: "trash")
                         }
@@ -137,38 +130,27 @@ struct AlbumView: View {
             }
             
         }
-        .confirmationDialog("Are you sure want to delete this album?", isPresented: $isPresentingConfirm){
+        .confirmationDialog(Prompt.AlbumView.deleteConfirmation, isPresented: $isPresentingConfirm){
             Button(role: .destructive){
                 AlbumDataController().deleteAlbum(album: album!, context: managedObjContext)
                 dismiss()
             }label: {
-                Text("Delete Album")
+                Text(Prompt.AlbumView.deleteTitle)
             }
         } message: {
-            Text("You cannot undo this action")
+            Text(Prompt.AlbumView.deleteWarning)
         }
-        .alert("Rename Album", isPresented: $isPresentingRename){
-            TextField("New album name", text: $textFieldText)
+        .alert(Prompt.AlbumView.renameTitle, isPresented: $isPresentingRename){
+            TextField(Prompt.AlbumView.renameTitlePrompt, text: $textFieldText)
             Button("OK"){
                 if !textFieldText.isEmpty{
                     AlbumDataController().editAlbum(album: album!, name: textFieldText, context: managedObjContext)
                 }
             }
         }
-        .alert("Locked",isPresented: $isPresentingLockedRegion){
+        .alert(Prompt.AlbumView.lockedTitle,isPresented: $isPresentingLockedRegion){
         } message: {
-            Text("You are outside photo box location, camera locked")
-        }
-        .sheet(isPresented: $isShowingAddSheet){
-            //            CameraViewNew(album: self.album)
-            
-            ImagePickerView(selectedImage: $selectedImage)
-                .onDisappear{
-                    if let image = selectedImage{
-                        selectedImage = fixOrientation(img: image)
-                        AlbumDataController().addPhoto(album: album!, photo: selectedImage!.pngData()!, context: managedObjContext)
-                    }
-                }
+            Text(Prompt.AlbumView.lockedCaption)
         }
         .onAppear{
             Task{

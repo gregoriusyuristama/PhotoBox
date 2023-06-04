@@ -10,10 +10,10 @@ import SwiftUI
 struct EmptyCollectionView: View {
     var body: some View {
         VStack{
-            Text("No Collection")
+            Text(Prompt.Empty.noCollectionTitle)
                 .padding(.bottom, 5)
                 .font(.headline)
-            Text("You can add new collection by tapping button \(Image(systemName: "plus")) above")
+            Text(Prompt.Empty.noCollectionCaption)
                 .multilineTextAlignment(.center)
                 .font(.caption)
                 .foregroundColor(.gray)

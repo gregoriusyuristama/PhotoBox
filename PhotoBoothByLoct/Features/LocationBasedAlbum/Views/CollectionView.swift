@@ -15,43 +15,47 @@ struct CollectionView: View {
     @StateObject var locationDataManager = LocationDataManager()
     @State private var showingAddView = false
     
+    let rows = [
+        GridItem(.flexible()),GridItem(.flexible())
+    ]
+    
     var body: some View {
         NavigationStack{
-            
             VStack{
                 if albums.isEmpty {
                     EmptyCollectionView()
                 }
                 else {
                     HStack{
-                        Text("Your Collections")
+                        Text(Prompt.Title.collectionViewSubtitle)
                             .font(.title2)
                             .bold()
                         Spacer()
                     }
                     .padding(.leading, 15)
                     ScrollView(.horizontal, showsIndicators: false){
-                        HStack{
+                        LazyHGrid(rows: rows, spacing: 10){
                             ForEach(albums){ album in
                                 NavigationLink(destination: AlbumView( name: album.albumName!, album: album)){
                                     CollectionPreview(previewImage: album.photos.last?.photo, name: album.albumName!, count: album.photos.count)
                                 }
+                                .frame(width: 168, height: 206)
                             }
                         }
+                        .frame(height: 500)
                         .padding(.horizontal, 20)
                     }
-                    
                     Spacer()
                 }
                 
             }
-            .navigationTitle("GeoBooth")
+            .navigationTitle(Prompt.Title.collectionViewTitle)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button{
                         showingAddView.toggle()
                     }label: {
-                        Label("Add Album", systemImage: "plus")
+                        Label(Prompt.Title.addButtonText, systemImage: "plus")
                     }
                 }
             }
@@ -60,16 +64,6 @@ struct CollectionView: View {
                 AddAlbumView()
             }
         }
-        .onAppear{
-            
-            
-//            albums.forEach{ album in
-//                locationDataManager.locationManager.startMonitoring(for: CLCircularRegion(center: CLLocationCoordinate2D(latitude: album.latitude, longitude: album.longitude), radius: locationDataManager.locationManager.maximumRegionMonitoringDistance, identifier: album.idAlbum!.uuidString))
-//                print(album.albumName)
-//            }
-        }
-
-
     }
 
 }

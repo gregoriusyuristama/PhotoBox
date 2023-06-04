@@ -33,7 +33,7 @@ struct HomepageView: View {
                 VStack{
                     HStack{
                         Spacer()
-                        Text("Welcome to\nGeoBooth")
+                        Text(Prompt.Welcome.welcomeTitle)
                             .font(.largeTitle)
                             .bold()
                             .padding(.top, geo.size.height*0.08)
@@ -47,7 +47,7 @@ struct HomepageView: View {
                             .font(.system(size: 30))
                         VStack{
                             HStack{
-                                Text("Location Based Album")
+                                Text(Prompt.Welcome.welcomePointOne)
                                     .font(.caption)
                                     .bold()
                                 Spacer()
@@ -55,7 +55,7 @@ struct HomepageView: View {
                             
                             HStack{
                                 
-                                Text("Save your photo collection based on location you’ve visited.")
+                                Text(Prompt.Welcome.welcomeCaptionOne)
                                     .font(.caption)
                                     .foregroundColor(.gray)
                                 Spacer()
@@ -73,7 +73,7 @@ struct HomepageView: View {
                             .font(.system(size: 30))
                         VStack{
                             HStack{
-                                Text("Map")
+                                Text(Prompt.Welcome.welcomePointTwo)
                                     .font(.caption)
                                     .bold()
                                 Spacer()
@@ -81,7 +81,7 @@ struct HomepageView: View {
                             
                             HStack{
                                 
-                                Text("Revisit your collection by looking at the map provided on the app.")
+                                Text(Prompt.Welcome.welcomeCaptionTwo)
                                     .font(.caption)
                                     .foregroundColor(.gray)
                                 Spacer()
@@ -99,7 +99,7 @@ struct HomepageView: View {
                             .font(.system(size: 30))
                         VStack{
                             HStack{
-                                Text("Photo Booth")
+                                Text(Prompt.Welcome.welcomePointThree)
                                     .font(.caption)
                                     .bold()
                                 Spacer()
@@ -107,7 +107,7 @@ struct HomepageView: View {
                             
                             HStack{
                                 
-                                Text("Customize you photo experience by using photo booth filter.")
+                                Text(Prompt.Welcome.welcomeCaptionThree)
                                     .font(.caption)
                                     .foregroundColor(.gray)
                                 Spacer()
@@ -124,7 +124,7 @@ struct HomepageView: View {
                     Button {
                         isShowingWelcomePage.toggle()
                     } label: {
-                        Text("Continue")
+                        Text(Prompt.Welcome.welcomeButtonText)
                             .frame(maxWidth: .infinity, maxHeight: 32)
                     }
                     .buttonStyle(.borderedProminent)
