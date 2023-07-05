@@ -37,7 +37,8 @@ struct CameraViewNew: View {
                                 Text("Save Photo")
                             }
                         }
-                    }                           .onAppear {
+                    }
+                    .onAppear {
                         model.camera.isPreviewPaused = true
                     }
                     .onDisappear {
