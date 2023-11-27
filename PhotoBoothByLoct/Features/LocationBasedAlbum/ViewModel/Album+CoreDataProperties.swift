@@ -31,7 +31,6 @@ extension Album {
         }else{
             return []
         }
-
     }
 
 }
